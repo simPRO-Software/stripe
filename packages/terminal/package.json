@@ -20,10 +20,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/capacitor-community/stripe.git"
+    "url": "git+https://github.com/simPRO-Software/stripe.git"
   },
   "bugs": {
-    "url": "https://github.com/capacitor-community/stripe/issues"
+    "url": "https://github.com/simPRO-Software/stripe/issues"
   },
   "keywords": [
     "capacitor",
