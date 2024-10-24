@@ -650,7 +650,7 @@ public class StripeTerminal extends Executor {
             var paymentIntent = exception.getPaymentIntent();
             String errorCode = "generic_error";
             if (paymentIntent != null && paymentIntent.getLastPaymentError() != null) {
-                String code = paymentIntent.getLastPaymentError().getCode();
+                String code = paymentIntent.getLastPaymentError().getDeclineCode();
                 if (code != null) {
                     errorCode = code;
                 }
