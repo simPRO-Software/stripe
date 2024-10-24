@@ -230,7 +230,14 @@ public class StripeTerminal: NSObject, DiscoveryDelegate, LocalMobileReaderDeleg
                 if let error = confirmError {
                     print("confirmPaymentIntent failed: \(error)")
                     self.plugin?.notifyListeners(TerminalEvents.Failed.rawValue, data: [:])
-                    call.reject(error.localizedDescription)
+                    if let paymentIntent = error.paymentIntent,
+                    let originalJSON = paymentIntent.originalJSON as? [AnyHashable: Any],
+                    let lastPaymentError = originalJSON["last_payment_error"] as? [String: Any],
+                    let errorCode = lastPaymentError["code"] as? String {
+                        call.reject(errorCode)
+                    } else {
+                        call.reject("generic_error")
+                    }
                 } else if let confirmedIntent = confirmResult {
                     print("PaymentIntent confirmed: \(confirmedIntent)")
                     self.plugin?.notifyListeners(TerminalEvents.ConfirmedPaymentIntent.rawValue, data: [:])

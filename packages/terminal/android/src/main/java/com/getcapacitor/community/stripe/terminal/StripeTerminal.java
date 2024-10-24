@@ -647,7 +647,15 @@ public class StripeTerminal extends Executor {
         @Override
         public void onFailure(TerminalException exception) {
             notifyListeners(TerminalEnumEvent.Failed.getWebEventName(), emptyObject);
-            confirmPaymentIntentCall.reject(exception.getLocalizedMessage());
+            var paymentIntent = exception.getPaymentIntent();
+            String errorCode = "generic_error";
+            if (paymentIntent != null && paymentIntent.getLastPaymentError() != null) {
+                String code = paymentIntent.getLastPaymentError().getCode();
+                if (code != null) {
+                    errorCode = code;
+                }
+            }
+            confirmPaymentIntentCall.reject(errorCode);
         }
     };
 
