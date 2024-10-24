@@ -1,5 +1,5 @@
 {
-  "name": "@capacitor-community/stripe-terminal",
+  "name": "@simPRO-Software/stripe-terminal",
   "version": "6.2.2",
   "engines": {
     "node": ">=18.0.0"
@@ -14,7 +14,7 @@
     "android/build.gradle",
     "dist/",
     "ios/Plugin/",
-    "CapacitorCommunityStripeTerminal.podspec"
+    "SimPROSoftwareStripeTerminal.podspec"
   ],
   "author": "Masahiko Sakakibara",
   "license": "MIT",
