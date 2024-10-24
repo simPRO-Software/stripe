@@ -233,7 +233,9 @@ public class StripeTerminal: NSObject, DiscoveryDelegate, LocalMobileReaderDeleg
                     if let paymentIntent = error.paymentIntent,
                     let originalJSON = paymentIntent.originalJSON as? [AnyHashable: Any],
                     let lastPaymentError = originalJSON["last_payment_error"] as? [String: Any],
-                    let errorCode = lastPaymentError["decline_code"] as? String {
+                    if let errorCode = lastPaymentError["decline_code"] as? String {
+                        call.reject(errorCode)
+                    } else if let errorCode = lastPaymentError["code"] as? String {
                         call.reject(errorCode)
                     } else {
                         call.reject("generic_error")

@@ -653,6 +653,11 @@ public class StripeTerminal extends Executor {
                 String code = paymentIntent.getLastPaymentError().getDeclineCode();
                 if (code != null) {
                     errorCode = code;
+                } else {
+                    code = paymentIntent.getLastPaymentError().getCode();
+                    if (code != null) {
+                        errorCode = code;
+                    }
                 }
             }
             confirmPaymentIntentCall.reject(errorCode);
