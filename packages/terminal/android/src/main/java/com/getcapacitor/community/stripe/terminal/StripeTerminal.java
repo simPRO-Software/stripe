@@ -440,9 +440,13 @@ public class StripeTerminal extends Executor {
         }
 
         @Override
-        public void onFailure(@NonNull TerminalException ex) {
+        public void onFailure(@NonNull TerminalException exception) {
             notifyListeners(TerminalEnumEvent.Failed.getWebEventName(), emptyObject);
-            collectCall.reject(ex.getLocalizedMessage(), ex);
+            String errorCode = "generic_error";
+            if (exception.getApiError() != null && exception.getApiError().getCode() != null) {
+                errorCode = exception.getApiError().getCode();
+            }
+            collectCall.reject(errorCode);
         }
     };
 
@@ -477,9 +481,13 @@ public class StripeTerminal extends Executor {
         }
 
         @Override
-        public void onFailure(@NonNull TerminalException ex) {
+        public void onFailure(@NonNull TerminalException exception) {
             notifyListeners(TerminalEnumEvent.Failed.getWebEventName(), emptyObject);
-            collectCall.reject(ex.getLocalizedMessage(), ex);
+            String errorCode = "generic_error";
+            if (exception.getApiError() != null && exception.getApiError().getCode() != null) {
+                errorCode = exception.getApiError().getCode();
+            }
+            collectCall.reject(errorCode);
         }
     };
 

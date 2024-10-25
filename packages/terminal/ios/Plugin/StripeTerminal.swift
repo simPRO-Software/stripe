@@ -208,12 +208,12 @@ public class StripeTerminal: NSObject, DiscoveryDelegate, LocalMobileReaderDeleg
         Terminal.shared.retrievePaymentIntent(clientSecret: call.getString("paymentIntent")!) { retrieveResult, retrieveError in
             if let error = retrieveError {
                 print("retrievePaymentIntent failed: \(error)")
-                call.reject(error.localizedDescription)
+                call.reject(ErrorKey.stripeAPIErrorCode.rawValue)
             } else if let paymentIntent = retrieveResult {
                 self.collectCancelable = Terminal.shared.collectPaymentMethod(paymentIntent) { collectResult, collectError in
                     if let error = collectError {
                         self.plugin?.notifyListeners(TerminalEvents.Failed.rawValue, data: [:])
-                        call.reject(error.localizedDescription)
+                        call.reject(ErrorKey.stripeAPIErrorCode.rawValue)
                     } else if let paymentIntent = collectResult {
                         self.plugin?.notifyListeners(TerminalEvents.CollectedPaymentIntent.rawValue, data: [:])
                         self.paymentIntent = paymentIntent
@@ -231,12 +231,15 @@ public class StripeTerminal: NSObject, DiscoveryDelegate, LocalMobileReaderDeleg
                     print("confirmPaymentIntent failed: \(error)")
                     self.plugin?.notifyListeners(TerminalEvents.Failed.rawValue, data: [:])
                     if let paymentIntent = error.paymentIntent,
-                    let originalJSON = paymentIntent.originalJSON as? [AnyHashable: Any],
-                    let lastPaymentError = originalJSON["last_payment_error"] as? [String: Any],
-                    if let errorCode = lastPaymentError["decline_code"] as? String {
-                        call.reject(errorCode)
-                    } else if let errorCode = lastPaymentError["code"] as? String {
-                        call.reject(errorCode)
+                       let originalJSON = paymentIntent.originalJSON as? [AnyHashable: Any],
+                       let lastPaymentError = originalJSON["last_payment_error"] as? [String: Any] {
+                        if let errorCode = lastPaymentError["decline_code"] as? String {
+                            call.reject(errorCode)
+                        } else if let errorCode = lastPaymentError["code"] as? String {
+                            call.reject(errorCode)
+                        } else {
+                            call.reject("generic_error")
+                        }
                     } else {
                         call.reject("generic_error")
                     }
