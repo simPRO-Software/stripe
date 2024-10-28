@@ -441,7 +441,7 @@ public class StripeTerminal extends Executor {
             returnObject.put("message", exception.getLocalizedMessage());
             if (exception.getApiError() != null) {
                 returnObject.put("code", exception.getApiError().getCode());
-                returnObject.put("decline_code", exception.getApiError().getDeclineCode());
+                returnObject.put("declineCode", exception.getApiError().getDeclineCode());
             }
             collectCall.reject(exception.getLocalizedMessage(), (String) null, returnObject);
         }
@@ -492,7 +492,7 @@ public class StripeTerminal extends Executor {
             returnObject.put("message", exception.getLocalizedMessage());
             if (exception.getApiError() != null) {
                 returnObject.put("code", exception.getApiError().getCode());
-                returnObject.put("decline_code", exception.getApiError().getDeclineCode());
+                returnObject.put("declineCode", exception.getApiError().getDeclineCode());
             }
             collectCall.reject(exception.getLocalizedMessage(), errorCode, returnObject);
         }
@@ -666,7 +666,7 @@ public class StripeTerminal extends Executor {
             returnObject.put("message", exception.getLocalizedMessage());
             if (exception.getApiError() != null) {
                 returnObject.put("code", exception.getApiError().getCode());
-                returnObject.put("decline_code", exception.getApiError().getDeclineCode());
+                returnObject.put("declineCode", exception.getApiError().getDeclineCode());
             }
             confirmPaymentIntentCall.reject(exception.getLocalizedMessage(), (String) null, returnObject);
         }
