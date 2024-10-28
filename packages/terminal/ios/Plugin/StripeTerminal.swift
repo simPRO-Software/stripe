@@ -208,7 +208,10 @@ public class StripeTerminal: NSObject, DiscoveryDelegate, LocalMobileReaderDeleg
         Terminal.shared.retrievePaymentIntent(clientSecret: call.getString("paymentIntent")!) { retrieveResult, retrieveError in
             if let error = retrieveError {
                 print("retrievePaymentIntent failed: \(error)")
-                call.reject(ErrorKey.stripeAPIErrorCode.rawValue)
+                var errorDetails: [String: Any] = ["message": error.localizedDescription]
+                errorDetails["code"] = ErrorKey.stripeAPIErrorCode.rawValue
+                errorDetails["decline_code"] = ErrorKey.stripeAPIDeclineCode.rawValue
+                call.reject(error.localizedDescription, nil, nil, errorDetails)
             } else if let paymentIntent = retrieveResult {
                 self.collectCancelable = Terminal.shared.collectPaymentMethod(paymentIntent) { collectResult, collectError in
                     if let error = collectError {
@@ -230,19 +233,10 @@ public class StripeTerminal: NSObject, DiscoveryDelegate, LocalMobileReaderDeleg
                 if let error = confirmError {
                     print("confirmPaymentIntent failed: \(error)")
                     self.plugin?.notifyListeners(TerminalEvents.Failed.rawValue, data: [:])
-                    if let paymentIntent = error.paymentIntent,
-                       let originalJSON = paymentIntent.originalJSON as? [AnyHashable: Any],
-                       let lastPaymentError = originalJSON["last_payment_error"] as? [String: Any] {
-                        if let errorCode = lastPaymentError["decline_code"] as? String {
-                            call.reject(errorCode)
-                        } else if let errorCode = lastPaymentError["code"] as? String {
-                            call.reject(errorCode)
-                        } else {
-                            call.reject("generic_error")
-                        }
-                    } else {
-                        call.reject("generic_error")
-                    }
+                    var errorDetails: [String: Any] = ["message": error.localizedDescription]
+                    errorDetails["code"] = ErrorKey.stripeAPIErrorCode.rawValue
+                    errorDetails["decline_code"] = ErrorKey.stripeAPIDeclineCode.rawValue
+                    call.reject(error.localizedDescription, nil, nil, errorDetails)
                 } else if let confirmedIntent = confirmResult {
                     print("PaymentIntent confirmed: \(confirmedIntent)")
                     self.plugin?.notifyListeners(TerminalEvents.ConfirmedPaymentIntent.rawValue, data: [:])
