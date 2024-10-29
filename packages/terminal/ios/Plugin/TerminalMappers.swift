@@ -136,7 +136,7 @@ class TerminalMappers {
         case "RANDOM": return SimulateReaderUpdate.random
         case "REQUIRED": return SimulateReaderUpdate.required
         case "LOW_BATTERY": return SimulateReaderUpdate.lowBattery
-        case "LOW_BATTERY_SUCCEED_CONNECT": return SimulateReaderUpdate.lowBatterySucceedConnect
+        // case "LOW_BATTERY_SUCCEED_CONNECT": return SimulateReaderUpdate.lowBatterySucceedConnect
         default: return SimulateReaderUpdate.none
         }
     }
