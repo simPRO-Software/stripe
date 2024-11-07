@@ -8,7 +8,8 @@ export class AppController {
   private stripe: Stripe;
   constructor(private readonly appService: AppService) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    this.stripe = require('stripe')('sk_test_51MmARtKzMYim9cy3l0jRblHOagmulcxNgJpXRLB3yDDyObnep8C5Eo70FrT5oDJr60G3CPAqdLVHagSyXizvk0ko00645CTaT5');
+    // this.stripe = require('stripe')('sk_test_51MmARtKzMYim9cy3l0jRblHOagmulcxNgJpXRLB3yDDyObnep8C5Eo70FrT5oDJr60G3CPAqdLVHagSyXizvk0ko00645CTaT5');
+    this.stripe = require('stripe')('sk_test_51QHYxgGbXJYg3u2TXIla45gTZ74FfJ8XvcbdJJKCJXJtPcb5AtBQM7GCP3Zz36BQyUJhszhP9F26bWcHgaD06r4B00urUXdhP8');
   }
 
   @Post('intent')
@@ -34,7 +35,7 @@ export class AppController {
     );
     const paymentIntent = await this.stripe.paymentIntents.create({
       amount: createPaymentIntentDto.amount || 1099,
-      currency: createPaymentIntentDto.currency || 'usd',
+      currency: createPaymentIntentDto.currency || 'aud',
       customer: customerId,
     });
     return {
@@ -152,7 +153,7 @@ export class AppController {
   }> {
     const intent = await this.stripe.paymentIntents.create({
       amount: 1000,
-      currency: 'usd',
+      currency: 'aud',
       payment_method_types: ['card_present'],
       capture_method: 'manual',
     });

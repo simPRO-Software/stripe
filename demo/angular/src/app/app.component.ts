@@ -14,7 +14,8 @@ export class AppComponent {
   constructor() {
     Stripe.initialize({
       publishableKey:
-        'pk_test_51MmARtKzMYim9cy3tOI5vOdHbai4G26V1AiDJmiE4aiAXc8BaSzh9Z0b0f8Novn0Jyyi8JqNdzLzcI2rUGT4g8ct00gfUVdLuM',
+        // 'pk_test_51MmARtKzMYim9cy3tOI5vOdHbai4G26V1AiDJmiE4aiAXc8BaSzh9Z0b0f8Novn0Jyyi8JqNdzLzcI2rUGT4g8ct00gfUVdLuM',
+        'pk_test_51QHYxgGbXJYg3u2TIg4MhysHQTC3xbWQTWgXTyTzUPA79fJeOCTCihj86WZ4fBFMlXFej1tSKqir74PJe8WAVFN00004RXBJao',
 
       /**
        * Danger: This is production environment using production key.
@@ -24,7 +25,8 @@ export class AppComponent {
     });
     StripeIdentity.initialize({
       publishableKey:
-        'pk_test_51MmARtKzMYim9cy3tOI5vOdHbai4G26V1AiDJmiE4aiAXc8BaSzh9Z0b0f8Novn0Jyyi8JqNdzLzcI2rUGT4g8ct00gfUVdLuM',
+        // 'pk_test_51MmARtKzMYim9cy3tOI5vOdHbai4G26V1AiDJmiE4aiAXc8BaSzh9Z0b0f8Novn0Jyyi8JqNdzLzcI2rUGT4g8ct00gfUVdLuM',
+        'pk_test_51QHYxgGbXJYg3u2TIg4MhysHQTC3xbWQTWgXTyTzUPA79fJeOCTCihj86WZ4fBFMlXFej1tSKqir74PJe8WAVFN00004RXBJao',
     });
   }
 }

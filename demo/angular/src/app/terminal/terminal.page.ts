@@ -99,7 +99,8 @@ export class TerminalPage {
           readerType,
         )
           ? 'tml_Ff37mAmk1XdBYT'
-          : 'tml_FOUOdQVIxvVdvN',
+          // : 'tml_FOUOdQVIxvVdvN',
+          : 'tml_FyYfkwsMteOYFp',
     }).catch((e) => {
       this.helper.updateItem(this.eventItems, 'discoverReaders', false);
       throw e;

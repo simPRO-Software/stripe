@@ -4,7 +4,7 @@
 <dict>
 	<key>com.apple.developer.in-app-payments</key>
 	<array>
-		<string>merchant.com.capacitor.stripe</string>
+		<string>merchant.com.simpro.mobile</string>
 	</array>
 </dict>
 </plist>
