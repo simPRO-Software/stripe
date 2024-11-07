@@ -4,7 +4,7 @@ import {
   ReaderDisplayMessage,
   ReaderEvent,
   TerminalEventsEnum
-} from '@capacitor-community/stripe-terminal';
+} from '@simPRO-Software/stripe-terminal';
 
 export const happyPathItems: ITestItems[] = [
   {

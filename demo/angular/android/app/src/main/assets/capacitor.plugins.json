@@ -8,7 +8,7 @@
 		"classpath": "com.getcapacitor.community.stripe.identity.StripeIdentityPlugin"
 	},
 	{
-		"pkg": "@capacitor-community/stripe-terminal",
+		"pkg": "@simPRO-Software/stripe-terminal",
 		"classpath": "com.getcapacitor.community.stripe.terminal.StripeTerminalPlugin"
 	}
 ]

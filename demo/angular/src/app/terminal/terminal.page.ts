@@ -23,7 +23,7 @@ import {
   StripeTerminal,
   TerminalConnectTypes,
   TerminalEventsEnum,
-} from '@capacitor-community/stripe-terminal';
+} from '@simPRO-Software/stripe-terminal';
 import { environment } from '../../environments/environment';
 import { firstValueFrom } from 'rxjs';
 import { ITestItems } from '../shared/interfaces';
