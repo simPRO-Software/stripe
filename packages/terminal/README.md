@@ -614,16 +614,16 @@ __Returns:__ <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHand
 ### addListener(TerminalEventsEnum.Failed, ...)
 
 ```typescript
-addListener(eventName: TerminalEventsEnum.Failed, listenerFunc: () => void) => Promise<PluginListenerHandle>
+addListener(eventName: TerminalEventsEnum.Failed, listenerFunc: (info: { message: string; code?: string; declineCode?: string; }) => void) => Promise<PluginListenerHandle>
 ```
 
 Emitted when either [`collectPaymentMethod()`](#collectpaymentmethod) or [`confirmPaymentIntent()`](#confirmpaymentintent)
 fails. The Promise returned by the relevant call will also be rejected.
 
-| Param              | Type                                                                     |
-| ------------------ | ------------------------------------------------------------------------ |
-| __`eventName`__    | <code><a href="#terminaleventsenum">TerminalEventsEnum.Failed</a></code> |
-| __`listenerFunc`__ | <code>() =&gt; void</code>                                               |
+| Param              | Type                                                                                      |
+| ------------------ | ----------------------------------------------------------------------------------------- |
+| __`eventName`__    | <code><a href="#terminaleventsenum">TerminalEventsEnum.Failed</a></code>                  |
+| __`listenerFunc`__ | <code>(info: { message: string; code?: string; declineCode?: string; }) =&gt; void</code> |
 
 __Returns:__ <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 

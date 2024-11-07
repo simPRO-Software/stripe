@@ -80,6 +80,29 @@ To use the latest Stripe Android, you need to version these up. To use the lates
 
 Note: `@capacitor-community/stripe-terminal` does not work with the default sdkVersion, so these updates are mandatory. See [/packages/terminal](https://github.com/capacitor-community/stripe/tree/main/packages/terminal#readme) for more information.
 
+### Error when running `cap update ios`
+
+```
+[!] CocoaPods could not find compatible versions for pod "StripePaymentSheet":
+  In snapshot (Podfile.lock):
+..
+You have either:
+ * out-of-date source repos which you can update with `pod repo update` or with `pod install --repo-update`.
+ * changed the constraints of dependency `StripePaymentSheet` inside your development pod `CapacitorCommunityStripe`.
+   You should run `pod update StripePaymentSheet` to apply changes you've made.
+```
+
+You will see this error often when using Capacitor iOS. The solution is simple: do the following:
+
+```bash
+% cd ios/App && pod install --repo-update
+```
+
+or 
+
+```bash
+% cd ios/App && pod update
+```
 
 ## Maintainers
 
@@ -117,3 +140,11 @@ Made with [contributors-img](https://contrib.rocks).
 |              |                     Android                     |                     iOS                     |                  Web                   |
 |:------------:|:-----------------------------------------------:|:-------------------------------------------:|:--------------------------------------:|
 |   Identity   |   ![](demo/screenshots/identity-android.png)    |    ![](demo/screenshots/identity-ios.png)     | ![](demo/screenshots/identity-web.png) |
+
+## How to use Demo
+
+```bash
+% git clone git@github.com:capacitor-community/stripe.git
+% cd stripe && npm install && npm run build
+% cd demo && npm install && npm run cap && npx cap update
+```
