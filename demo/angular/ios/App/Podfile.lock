@@ -11,7 +11,7 @@ PODS:
   - CapacitorCordova (6.1.2)
   - SimPROSoftwareStripeTerminal (6.2.2):
     - Capacitor
-    - StripeTerminal (~> 3.6.0)
+    - StripeTerminal (~> 4.0.0)
   - StripeApplePay (23.32.0):
     - StripeCore (= 23.32.0)
   - StripeCameraCore (23.32.0):
@@ -35,7 +35,7 @@ PODS:
     - StripeCore (= 23.32.0)
     - StripePayments (= 23.32.0)
     - StripeUICore (= 23.32.0)
-  - StripeTerminal (3.6.0)
+  - StripeTerminal (4.0.0)
   - StripeUICore (23.32.0):
     - StripeCore (= 23.32.0)
 
@@ -75,7 +75,7 @@ SPEC CHECKSUMS:
   CapacitorCommunityStripe: 029a530c26bbc805b855da11375d347fb5398835
   CapacitorCommunityStripeIdentity: 31f01cd07e07f9ff0b99dc4a80188b9518e8e12a
   CapacitorCordova: f48c89f96c319101cd2f0ce8a2b7449b5fb8b3dd
-  SimPROSoftwareStripeTerminal: de7e0ff56d5420cb7a08c71255d561e2710d13f1
+  SimPROSoftwareStripeTerminal: 8458b1421d60fb7447cef9966cc2f5fb439b3a8d
   StripeApplePay: fd4aeaa8af1ebbfe5e38390ef7b4607f66494f80
   StripeCameraCore: 2f226573bc1a84deba61ded08e2d3f49b0bd5a7d
   StripeCore: 4999b0c234127b28b9e656caa558ba4406ce58b3
@@ -83,9 +83,9 @@ SPEC CHECKSUMS:
   StripePayments: a1260c9fecdb8640462c1fe70c4e2e17df2ab3a8
   StripePaymentSheet: 155d402ee01447002d23c982e905ce06e6d7ef66
   StripePaymentsUI: 2084d4398cb4869b13dd9eac43a00481476b152f
-  StripeTerminal: d480f58ed3a170695a92954a0f64e97383983a26
+  StripeTerminal: b8a0f7bc10534eb060f676c9b3b813b2613a137b
   StripeUICore: 2c115cc8498f3badc19b4a41b3b1fdac0ae21d41
 
-PODFILE CHECKSUM: 780118806be199f52fb115e2c0f724d5d408589e
+PODFILE CHECKSUM: 1e8ae4fb84544d70fee28fad8d714bed252620de
 
 COCOAPODS: 1.16.2
