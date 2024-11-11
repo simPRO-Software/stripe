@@ -3,7 +3,7 @@ import Capacitor
 import StripeTerminal
 
 public class StripeTerminal: NSObject, DiscoveryDelegate, TerminalDelegate, ReaderDelegate, MobileReaderDelegate, TapToPayReaderDelegate, InternetReaderDelegate {
-    
+
     weak var plugin: StripeTerminalPlugin?
     private let apiClient = APIClient()
 
@@ -89,7 +89,7 @@ public class StripeTerminal: NSObject, DiscoveryDelegate, TerminalDelegate, Read
 
     public func connectReader(_ call: CAPPluginCall) {
         if self.type == .tapToPay {
-            self.connectLocalMobileReader(call)
+            self.connectTapToPayReader(call)
         } else if self.type == .internet {
             self.connectInternetReader(call)
         } else {
@@ -124,7 +124,7 @@ public class StripeTerminal: NSObject, DiscoveryDelegate, TerminalDelegate, Read
         }
     }
 
-    private func connectLocalMobileReader(_ call: CAPPluginCall) {
+    private func connectTapToPayReader(_ call: CAPPluginCall) {
         let autoReconnectOnUnexpectedDisconnect = call.getBool("autoReconnectOnUnexpectedDisconnect", false)
         let merchantDisplayName: String? = call.getString("merchantDisplayName")
         let onBehalfOf: String? = call.getString("onBehalfOf")
@@ -425,7 +425,7 @@ public class StripeTerminal: NSObject, DiscoveryDelegate, TerminalDelegate, Read
     }
 
     /*
-     * localMobile
+     * TapToPay
      */
 
     public func tapToPayReader(_ reader: Reader, didStartInstallingUpdate update: ReaderSoftwareUpdate, cancelable: Cancelable?) {
