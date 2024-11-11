@@ -136,6 +136,7 @@ export interface StripeTerminalPlugin {
      * The Stripe account ID for which these funds are intended.
      */
     onBehalfOf?: string;
+    locationId?: string;
   }): Promise<void>;
   getConnectedReader(): Promise<{ reader: ReaderInterface | null }>;
   disconnectReader(): Promise<void>;
