@@ -224,6 +224,7 @@ public class StripeTerminal extends Executor {
     }
 
     public void connectReader(final PluginCall call) {
+        this.locationId = call.getString("locationId", this.locationId);
         if (this.terminalConnectType == TerminalConnectTypes.TapToPay) {
             this.connectTapToPayReader(call);
         } else if (this.terminalConnectType == TerminalConnectTypes.Internet) {
@@ -273,7 +274,6 @@ public class StripeTerminal extends Executor {
     private void connectTapToPayReader(final PluginCall call) {
         JSObject reader = call.getObject("reader");
         String serialNumber = reader.getString("serialNumber");
-        this.locationId = call.getString("locationId", this.locationId);
 
         Reader foundReader = this.findReader(this.discoveredReadersList, serialNumber);
 
@@ -361,7 +361,6 @@ public class StripeTerminal extends Executor {
     private void connectInternetReader(final PluginCall call) {
         JSObject reader = call.getObject("reader");
         String serialNumber = reader.getString("serialNumber");
-        this.locationId = call.getString("locationId", this.locationId);
 
         Reader foundReader = this.findReader(this.discoveredReadersList, serialNumber);
 
@@ -377,7 +376,6 @@ public class StripeTerminal extends Executor {
     private void connectUsbReader(final PluginCall call) {
         JSObject reader = call.getObject("reader");
         String serialNumber = reader.getString("serialNumber");
-        this.locationId = call.getString("locationId", this.locationId);
 
         Reader foundReader = this.findReader(this.discoveredReadersList, serialNumber);
 
@@ -393,7 +391,6 @@ public class StripeTerminal extends Executor {
     private void connectBluetoothReader(final PluginCall call) {
         JSObject reader = call.getObject("reader");
         String serialNumber = reader.getString("serialNumber");
-        this.locationId = call.getString("locationId", this.locationId);
 
         Reader foundReader = this.findReader(this.discoveredReadersList, serialNumber);
 

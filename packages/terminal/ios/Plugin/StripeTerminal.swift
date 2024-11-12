@@ -88,6 +88,7 @@ public class StripeTerminal: NSObject, DiscoveryDelegate, TerminalDelegate, Read
     }
 
     public func connectReader(_ call: CAPPluginCall) {
+        self.locationId = call.getString("locationId") ?? self.locationId
         if self.type == .tapToPay {
             self.connectTapToPayReader(call)
         } else if self.type == .internet {
