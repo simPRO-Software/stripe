@@ -100,7 +100,7 @@ export class TerminalPage {
         )
           ? 'tml_Ff37mAmk1XdBYT'
           // : 'tml_FOUOdQVIxvVdvN',
-          : 'tml_FyYfkwsMteOYFp',
+          : 'tml_FzOLdgFjxlDQbh',
     }).catch((e) => {
       this.helper.updateItem(this.eventItems, 'discoverReaders', false);
       throw e;
@@ -522,6 +522,7 @@ export class TerminalPage {
           await StripeTerminal.addListener(
             TerminalEventsEnum.RequestedConnectionToken,
             async () => {
+              console.log('SHIVA: RequestedConnectionToken');
               const { secret } = await firstValueFrom(
                 this.http.post<{
                   secret: string;
