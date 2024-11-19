@@ -16,6 +16,10 @@ export const checkDiscoverMethodItems: ITestItems[] = [
   },
   {
     type: 'event',
+    name: TerminalEventsEnum.DiscoveringReaders,
+  },
+  {
+    type: 'event',
     name: TerminalEventsEnum.DiscoveredReaders,
   },
   {

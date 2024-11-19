@@ -21,6 +21,10 @@ export const updateDeviceRequiredItems: ITestItems[] = [
   },
   {
     type: 'event',
+    name: TerminalEventsEnum.DiscoveringReaders,
+  },
+  {
+    type: 'event',
     name: TerminalEventsEnum.DiscoveredReaders,
   },
   {
