@@ -5,6 +5,6 @@
 export const environment = {
   production: false,
   // api: 'http://localhost:3000/',
-  api: 'https://genie.shiv19.com/',
+  api: 'https://localdev.shiv19.com/',
   // api: 'https://j3x0ln9gj7.execute-api.ap-northeast-1.amazonaws.com/dev/',
 };
