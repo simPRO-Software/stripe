@@ -212,7 +212,7 @@ public class StripeTerminal: NSObject, DiscoveryDelegate, TerminalDelegate, Read
             } else if let paymentIntent = retrieveResult {
                 self.collectCancelable = Terminal.shared.collectPaymentMethod(paymentIntent) { collectResult, collectError in
                     if let error = collectError {
-                        var errorDetails: [String: Any] = ["message": error.localizedDescription, "code": (error as NSError).code]
+                        var errorDetails: [String: Any] = ["message": error.localizedDescription, "code": String((error as NSError).code)]
                         self.plugin?.notifyListeners(TerminalEvents.Failed.rawValue, data: errorDetails)
                         call.reject(error.localizedDescription, nil, nil, errorDetails)
                     } else if let paymentIntent = collectResult {

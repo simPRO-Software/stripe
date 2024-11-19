@@ -521,9 +521,12 @@ public class StripeTerminal extends Executor {
             String errorCode = "generic_error";
             if (exception.getApiError() != null && exception.getApiError().getCode() != null) {
                 errorCode = exception.getApiError().getCode();
+            }else {
+                errorCode = exception.getErrorCode().name();
             }
             var returnObject = new JSObject();
             returnObject.put("message", exception.getLocalizedMessage());
+            returnObject.put("code", errorCode);
             if (exception.getApiError() != null) {
                 returnObject.put("code", exception.getApiError().getCode());
                 returnObject.put("declineCode", exception.getApiError().getDeclineCode());
