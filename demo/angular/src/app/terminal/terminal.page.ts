@@ -502,6 +502,7 @@ export class TerminalPage {
   private async prepareTerminalEvents(eventItems: ITestItems[], readerType = undefined) {
     const eventKeys = Object.keys(TerminalEventsEnum);
     for (const key of eventKeys) {
+      console.log('Adding listener for', key);
       const handler = StripeTerminal.addListener(
         TerminalEventsEnum[key],
         (info) => {
@@ -536,7 +537,7 @@ export class TerminalPage {
     }
     this.eventItems = eventItems;
     await StripeTerminal.initialize({
-      tokenProviderEndpoint: environment.api + 'connection/token',
+      // tokenProviderEndpoint: environment.api + 'connection/token',
       isTest: !readerType || readerType === TerminalConnectTypes.TapToPay,
     })
       .then(() => this.helper.updateItem(this.eventItems, 'initialize', true))

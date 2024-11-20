@@ -25,6 +25,7 @@ public class TokenProvider implements ConnectionTokenProvider {
     protected final String tokenProviderEndpoint;
     protected BiConsumer<String, JSObject> notifyListenersFunction;
     ConnectionTokenCallback pendingCallback = null;
+    ConnectionTokenCallback pendingCallback2 = null;
 
     public TokenProvider(
         Supplier<Context> contextSupplier,
@@ -41,12 +42,19 @@ public class TokenProvider implements ConnectionTokenProvider {
         if (pendingCallback != null) {
             if (Objects.equals(token, "")) {
                 pendingCallback.onFailure(new ConnectionTokenException("Missing `token` is empty"));
+                if (pendingCallback2 != null) {
+                    pendingCallback2.onFailure(new ConnectionTokenException("Missing `token` is empty"));
+                }
                 call.reject("Missing `token` is empty");
             } else {
                 pendingCallback.onSuccess(token);
+                if (pendingCallback2 != null) {
+                    pendingCallback2.onSuccess(token);
+                }
                 call.resolve();
             }
             pendingCallback = null;
+            pendingCallback2 = null;
         } else {
             call.reject("Stripe Terminal do not pending fetchConnectionToken");
         }
@@ -54,8 +62,15 @@ public class TokenProvider implements ConnectionTokenProvider {
 
     @Override
     public void fetchConnectionToken(ConnectionTokenCallback callback) {
+        Log.d("TokenProvider", "fetchConnectionToken was called by the SDK");
         if (Objects.equals(this.tokenProviderEndpoint, "")) {
-            pendingCallback = callback;
+            if (pendingCallback == null) {
+                pendingCallback = callback;
+            } else {
+                // Sometimes the SDK can call fetchConnectionToken on the first initialization of the SDK
+                Log.d("TokenProvider", "pendingCallback1 was not null, using callback2");
+                pendingCallback2 = callback;
+            }
             this.notifyListeners(TerminalEnumEvent.RequestedConnectionToken.getWebEventName(), new JSObject());
         } else {
             try {

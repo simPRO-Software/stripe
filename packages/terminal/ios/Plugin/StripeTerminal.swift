@@ -580,6 +580,7 @@ class APIClient: ConnectionTokenProvider {
     weak var plugin: StripeTerminalPlugin?
     var tokenProviderEndpoint: String = ""
     private var pendingCompletion: ConnectionTokenCompletionBlock?
+    private var pendingCompletion2: ConnectionTokenCompletionBlock?
 
     func initialize(plugin: StripeTerminalPlugin?, tokenProviderEndpoint: String) {
         self.plugin = plugin
@@ -594,12 +595,19 @@ class APIClient: ConnectionTokenProvider {
                                     code: 3000,
                                     userInfo: [NSLocalizedDescriptionKey: "Missing `token` is empty"])
                 completion(nil, error)
+                if (pendingCompletion2 != nil) {
+                    pendingCompletion2!(nil, error)
+                }
                 call.reject("Missing `token` is empty")
             } else {
                 completion(token, nil)
+                if (pendingCompletion2 != nil) {
+                    pendingCompletion2!(token, nil)
+                }
                 call.resolve()
             }
             pendingCompletion = nil
+            pendingCompletion2 = nil
         } else {
             call.reject("Stripe Terminal do not pending fetchConnectionToken")
         }
@@ -608,7 +616,12 @@ class APIClient: ConnectionTokenProvider {
     // Fetches a ConnectionToken from your backend
     func fetchConnectionToken(_ completion: @escaping ConnectionTokenCompletionBlock) {
         if tokenProviderEndpoint == "" {
-            pendingCompletion = completion
+            if (pendingCompletion == nil) {
+                pendingCompletion = completion
+            } else {
+                // Sometimes the SDK can call fetchConnectionToken on the first initialization of the SDK
+                pendingCompletion2 = completion
+            }
             self.plugin?.notifyListeners(TerminalEvents.RequestedConnectionToken.rawValue, data: [:])
         } else {
             let config = URLSessionConfiguration.default

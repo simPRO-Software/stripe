@@ -9,7 +9,7 @@ PODS:
     - Capacitor
     - StripeIdentity (~> 23.32.0)
   - CapacitorCordova (6.1.2)
-  - SimPROSoftwareStripeTerminal (6.2.2):
+  - SimPROSoftwareStripeTerminal (6.3.3):
     - Capacitor
     - StripeTerminal (~> 4.0.0)
   - StripeApplePay (23.32.0):
@@ -75,7 +75,7 @@ SPEC CHECKSUMS:
   CapacitorCommunityStripe: 029a530c26bbc805b855da11375d347fb5398835
   CapacitorCommunityStripeIdentity: 31f01cd07e07f9ff0b99dc4a80188b9518e8e12a
   CapacitorCordova: f48c89f96c319101cd2f0ce8a2b7449b5fb8b3dd
-  SimPROSoftwareStripeTerminal: 8458b1421d60fb7447cef9966cc2f5fb439b3a8d
+  SimPROSoftwareStripeTerminal: 50d81a334788637567750b882c29d3b78abc7264
   StripeApplePay: fd4aeaa8af1ebbfe5e38390ef7b4607f66494f80
   StripeCameraCore: 2f226573bc1a84deba61ded08e2d3f49b0bd5a7d
   StripeCore: 4999b0c234127b28b9e656caa558ba4406ce58b3
