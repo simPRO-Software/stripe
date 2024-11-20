@@ -470,13 +470,13 @@ public class StripeTerminal extends Executor {
 
         @Override
         public void onFailure(@NonNull TerminalException exception) {
-            notifyListeners(TerminalEnumEvent.Failed.getWebEventName(), emptyObject);
             var returnObject = new JSObject();
             returnObject.put("message", exception.getLocalizedMessage());
             if (exception.getApiError() != null) {
                 returnObject.put("code", exception.getApiError().getCode());
                 returnObject.put("declineCode", exception.getApiError().getDeclineCode());
             }
+            notifyListeners(TerminalEnumEvent.Failed.getWebEventName(), returnObject);
             collectCall.reject(exception.getLocalizedMessage(), (String) null, returnObject);
         }
     };
@@ -517,7 +517,6 @@ public class StripeTerminal extends Executor {
 
         @Override
         public void onFailure(@NonNull TerminalException exception) {
-            notifyListeners(TerminalEnumEvent.Failed.getWebEventName(), emptyObject);
             String errorCode = "generic_error";
             if (exception.getApiError() != null && exception.getApiError().getCode() != null) {
                 errorCode = exception.getApiError().getCode();
@@ -531,6 +530,7 @@ public class StripeTerminal extends Executor {
                 returnObject.put("code", exception.getApiError().getCode());
                 returnObject.put("declineCode", exception.getApiError().getDeclineCode());
             }
+            notifyListeners(TerminalEnumEvent.Failed.getWebEventName(), returnObject);
             collectCall.reject(exception.getLocalizedMessage(), errorCode, returnObject);
         }
     };
@@ -698,13 +698,13 @@ public class StripeTerminal extends Executor {
 
         @Override
         public void onFailure(TerminalException exception) {
-            notifyListeners(TerminalEnumEvent.Failed.getWebEventName(), emptyObject);
             var returnObject = new JSObject();
             returnObject.put("message", exception.getLocalizedMessage());
             if (exception.getApiError() != null) {
                 returnObject.put("code", exception.getApiError().getCode());
                 returnObject.put("declineCode", exception.getApiError().getDeclineCode());
             }
+            notifyListeners(TerminalEnumEvent.Failed.getWebEventName(), returnObject);
             confirmPaymentIntentCall.reject(exception.getLocalizedMessage(), (String) null, returnObject);
         }
     };
