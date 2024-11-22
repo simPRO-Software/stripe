@@ -169,7 +169,8 @@ public class StripeTerminal: NSObject, DiscoveryDelegate, TerminalDelegate, Read
                 self.plugin?.notifyListeners(TerminalEvents.ConnectedReader.rawValue, data: [:])
                 call.resolve()
             } else if let error = error {
-                call.reject(error.localizedDescription)
+                let errorDetails: [String: Any] = ["message": error.localizedDescription, "code": String((error as NSError).code)]
+                call.reject(error.localizedDescription, nil, nil, errorDetails)
             }
         }
     }
@@ -228,12 +229,12 @@ public class StripeTerminal: NSObject, DiscoveryDelegate, TerminalDelegate, Read
         Terminal.shared.retrievePaymentIntent(clientSecret: call.getString("paymentIntent")!) { retrieveResult, retrieveError in
             if let error = retrieveError {
                 print("retrievePaymentIntent failed: \(error)")
-                var errorDetails: [String: Any] = ["message": error.localizedDescription]
+                let errorDetails: [String: Any] = ["message": error.localizedDescription]
                 call.reject(error.localizedDescription, nil, nil, errorDetails)
             } else if let paymentIntent = retrieveResult {
                 self.collectCancelable = Terminal.shared.collectPaymentMethod(paymentIntent) { collectResult, collectError in
                     if let error = collectError {
-                        var errorDetails: [String: Any] = ["message": error.localizedDescription, "code": String((error as NSError).code)]
+                        let errorDetails: [String: Any] = ["message": error.localizedDescription, "code": String((error as NSError).code)]
                         self.plugin?.notifyListeners(TerminalEvents.Failed.rawValue, data: errorDetails)
                         call.reject(error.localizedDescription, nil, nil, errorDetails)
                     } else if let paymentIntent = collectResult {
@@ -401,7 +402,8 @@ public class StripeTerminal: NSObject, DiscoveryDelegate, TerminalDelegate, Read
             }
             cancelable.cancel { error in
                 if let error = error {
-                    call.reject(error.localizedDescription)
+                    let errorDetails: [String: Any] = ["message": error.localizedDescription, "code": String((error as NSError).code)]
+                    call.reject(error.localizedDescription, nil, nil, errorDetails)
                 } else {
                     call.resolve()
                 }

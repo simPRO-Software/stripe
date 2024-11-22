@@ -220,6 +220,10 @@ public class StripeTerminal extends Executor {
                         @Override
                         public void onFailure(@NonNull TerminalException ex) {
                             Log.d(logTag, ex.getLocalizedMessage());
+                            var returnObject = new JSObject();
+                            returnObject.put("message", ex.getLocalizedMessage());
+                            returnObject.put("code", ex.getErrorCode().name());
+                            call.reject(ex.getLocalizedMessage(), ex.getErrorCode().name(), returnObject);
                         }
                     }
                 );
@@ -720,7 +724,10 @@ public class StripeTerminal extends Executor {
             @Override
             public void onFailure(@NonNull TerminalException ex) {
                 ex.printStackTrace();
-                call.reject(ex.getLocalizedMessage(), ex);
+                var returnObject = new JSObject();
+                returnObject.put("message", ex.getLocalizedMessage());
+                returnObject.put("code", ex.getErrorCode().name());
+                call.reject(ex.getLocalizedMessage(), ex.getErrorCode().name(), returnObject);
             }
         };
     }
