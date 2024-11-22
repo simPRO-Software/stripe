@@ -1,6 +1,6 @@
 {
   "name": "@simPRO-Software/stripe-terminal",
-  "version": "6.3.7",
+  "version": "6.3.8",
   "engines": {
     "node": ">=18.0.0"
   },
