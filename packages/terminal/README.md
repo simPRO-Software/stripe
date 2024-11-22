@@ -222,6 +222,7 @@ await StripeTerminal.setSimulatorConfiguration({ update: SimulateReaderUpdate.Up
 * [`clearReaderDisplay()`](#clearreaderdisplay)
 * [`rebootReader()`](#rebootreader)
 * [`cancelReaderReconnection()`](#cancelreaderreconnection)
+* [`isTapToPaySupported()`](#istaptopaysupported)
 * [`addListener(TerminalEventsEnum.Loaded, ...)`](#addlistenerterminaleventsenumloaded)
 * [`addListener(TerminalEventsEnum.RequestedConnectionToken, ...)`](#addlistenerterminaleventsenumrequestedconnectiontoken)
 * [`addListener(TerminalEventsEnum.DiscoveredReaders, ...)`](#addlistenerterminaleventsenumdiscoveredreaders)
@@ -437,6 +438,17 @@ rebootReader() => Promise<void>
 ```typescript
 cancelReaderReconnection() => Promise<void>
 ```
+
+--------------------
+
+
+### isTapToPaySupported()
+
+```typescript
+isTapToPaySupported() => Promise<{ supported: boolean; message?: string; localisedMessage?: string; }>
+```
+
+**Returns:** <code>Promise&lt;{ supported: boolean; message?: string; localisedMessage?: string; }&gt;</code>
 
 --------------------
 

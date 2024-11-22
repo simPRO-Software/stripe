@@ -27,7 +27,6 @@ import com.stripe.stripeterminal.external.callable.InternetReaderListener;
 import com.stripe.stripeterminal.external.callable.MobileReaderListener;
 import com.stripe.stripeterminal.external.callable.PaymentIntentCallback;
 import com.stripe.stripeterminal.external.callable.ReaderCallback;
-//import com.stripe.stripeterminal.external.callable.ReaderReconnectionListener;
 import com.stripe.stripeterminal.external.callable.TapToPayReaderListener;
 import com.stripe.stripeterminal.external.callable.TerminalListener;
 import com.stripe.stripeterminal.external.models.BatteryStatus;
@@ -40,6 +39,7 @@ import com.stripe.stripeterminal.external.models.ConnectionConfiguration.Bluetoo
 import com.stripe.stripeterminal.external.models.ConnectionConfiguration.InternetConnectionConfiguration;
 import com.stripe.stripeterminal.external.models.ConnectionConfiguration.UsbConnectionConfiguration;
 import com.stripe.stripeterminal.external.models.ConnectionStatus;
+import com.stripe.stripeterminal.external.models.DeviceType;
 import com.stripe.stripeterminal.external.models.DisconnectReason;
 import com.stripe.stripeterminal.external.models.DiscoveryConfiguration;
 import com.stripe.stripeterminal.external.models.PaymentIntent;
@@ -50,6 +50,7 @@ import com.stripe.stripeterminal.external.models.ReaderDisplayMessage;
 import com.stripe.stripeterminal.external.models.ReaderEvent;
 import com.stripe.stripeterminal.external.models.ReaderInputOptions;
 import com.stripe.stripeterminal.external.models.ReaderSoftwareUpdate;
+import com.stripe.stripeterminal.external.models.ReaderSupportResult;
 import com.stripe.stripeterminal.external.models.SimulateReaderUpdate;
 import com.stripe.stripeterminal.external.models.SimulatedCard;
 import com.stripe.stripeterminal.external.models.SimulatedCardType;
@@ -331,33 +332,6 @@ public class StripeTerminal extends Executor {
             notifyListeners(TerminalEnumEvent.DisconnectedReader.getWebEventName(), new JSObject().put("reason", reason.toString()));
         }
     };
-
-//    ReaderReconnectionListener readerReconnectionListener = new ReaderReconnectionListener() {
-//        @Override
-//        public void onReaderReconnectStarted(@NonNull Reader reader, @NonNull Cancelable cancelable, @NonNull DisconnectReason reason) {
-//            cancelReaderConnectionCancellable = cancelable;
-//            notifyListeners(
-//                TerminalEnumEvent.ReaderReconnectStarted.getWebEventName(),
-//                new JSObject().put("reason", reason.toString()).put("reader", convertReaderInterface(reader))
-//            );
-//        }
-//
-//        @Override
-//        public void onReaderReconnectSucceeded(@NonNull Reader reader) {
-//            notifyListeners(
-//                TerminalEnumEvent.ReaderReconnectSucceeded.getWebEventName(),
-//                new JSObject().put("reader", convertReaderInterface(reader))
-//            );
-//        }
-//
-//        @Override
-//        public void onReaderReconnectFailed(@NonNull Reader reader) {
-//            notifyListeners(
-//                TerminalEnumEvent.ReaderReconnectFailed.getWebEventName(),
-//                new JSObject().put("reader", convertReaderInterface(reader))
-//            );
-//        }
-//    };
 
     private void connectInternetReader(final PluginCall call) {
         JSObject reader = call.getObject("reader");
@@ -687,6 +661,23 @@ public class StripeTerminal extends Executor {
                 }
             }
         );
+    }
+
+    public void isTapToPaySupported(final PluginCall call) {
+        if (!Terminal.isInitialized()) {
+            call.reject("StripeTerminal is not initialized. Please initialize StripeTerminal first.");
+            return;
+        }
+        ReaderSupportResult readerSupportResult = Terminal.getInstance().supportsReadersOfType(DeviceType.TAP_TO_PAY_DEVICE, new DiscoveryConfiguration.TapToPayDiscoveryConfiguration());
+
+        var returnObject = new JSObject();
+        returnObject.put("supported", readerSupportResult.isSupported());
+        if (readerSupportResult.getError() != null) {
+            returnObject.put("localisedMessage", readerSupportResult.getError().getLocalizedMessage());
+            call.reject("Unsupported", returnObject);
+        } else {
+            call.resolve(returnObject);
+        }
     }
 
     private final PaymentIntentCallback confirmPaymentMethodCallback = new PaymentIntentCallback() {

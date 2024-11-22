@@ -125,6 +125,21 @@ public class StripeTerminal: NSObject, DiscoveryDelegate, TerminalDelegate, Read
         }
     }
 
+    public func isTapToPaySupported(_ call: CAPPluginCall) {
+        if (self.isInitialize == false) {
+            call.reject("StripeTerminal is not initialized. Please initialize StripeTerminal first.")
+            return
+        }
+        
+        let result = Terminal.shared.supportsReaders(of: .tapToPay, discoveryMethod: .tapToPay, simulated: self.isTest ?? true)
+        switch result {
+            case .success:
+                call.resolve(["supported": true])
+            case .failure(let error):
+                call.reject(error.localizedDescription)
+        }
+    }
+
     private func connectTapToPayReader(_ call: CAPPluginCall) {
         let autoReconnectOnUnexpectedDisconnect = call.getBool("autoReconnectOnUnexpectedDisconnect", false)
         let merchantDisplayName: String? = call.getString("merchantDisplayName")

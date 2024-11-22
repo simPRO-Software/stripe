@@ -465,6 +465,14 @@ export class TerminalPage {
     });
   }
 
+  checkTapToPayDeviceSupport() {
+    StripeTerminal.isTapToPaySupported().then((result) => {
+      console.log('isAvailable', result);
+    }).catch((e) => {
+      console.error(e);
+    });
+  }
+
   private alertFilterReaders(
     readers: ReaderInterface[],
   ): Promise<ReaderInterface | undefined> {

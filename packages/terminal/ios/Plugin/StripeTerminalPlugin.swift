@@ -85,4 +85,8 @@ public class StripeTerminalPlugin: CAPPlugin {
         self.implementation.cancelReaderReconnection(call)
     }
 
+    @objc func isTapToPaySupported(_ call: CAPPluginCall) {
+        self.implementation.isTapToPaySupported(call)
+    }
+
 }

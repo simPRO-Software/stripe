@@ -239,6 +239,13 @@ export class StripeTerminalWeb
     console.log('cancelReaderReconnection');
   }
 
+  async isTapToPaySupported(): Promise<{ supported: boolean; message?: string; localisedMessage?: string; }> {
+    return {
+      supported: false,
+      message: 'isTapToPaySupported is not supported in web platform.',
+    };
+  }
+
   collect = 'deprecated';
   cancelCollect = 'deprecated';
 }

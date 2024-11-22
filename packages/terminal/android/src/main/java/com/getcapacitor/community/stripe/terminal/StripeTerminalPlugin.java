@@ -23,6 +23,10 @@ import java.util.Objects;
         @Permission(
             alias = "bluetooth",
             strings = { Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_ADVERTISE }
+        ),
+        @Permission(
+            alias = "nfc",
+            strings = { Manifest.permission.NFC }
         )
     }
 )
@@ -189,5 +193,23 @@ public class StripeTerminalPlugin extends Plugin {
     @PluginMethod
     public void cancelReaderReconnection(PluginCall call) {
         this.implementation.cancelReaderReconnection(call);
+    }
+
+    @PermissionCallback
+    private void nfcPermsCallback(PluginCall call) throws TerminalException {
+        if (getPermissionState("nfc") == PermissionState.GRANTED) {
+            this.isTapToPaySupported(call);
+        } else {
+            requestPermissionForAlias("nfc", call, "nfcPermsCallback");
+        }
+    }
+
+    @PluginMethod
+    public void isTapToPaySupported(PluginCall call) {
+        if (getPermissionState("nfc") != PermissionState.GRANTED) {
+            requestPermissionForAlias("nfc", call, "nfcPermsCallback");
+        } else {
+            this.implementation.isTapToPaySupported(call);
+        }
     }
 }

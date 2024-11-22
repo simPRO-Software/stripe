@@ -21,4 +21,5 @@ CAP_PLUGIN(StripeTerminalPlugin, "StripeTerminal",
            CAP_PLUGIN_METHOD(clearReaderDisplay, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(rebootReader, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(cancelReaderReconnection, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(isTapToPaySupported, CAPPluginReturnPromise);
 )

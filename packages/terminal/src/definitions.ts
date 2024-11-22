@@ -150,6 +150,7 @@ export interface StripeTerminalPlugin {
   clearReaderDisplay(): Promise<void>;
   rebootReader(): Promise<void>;
   cancelReaderReconnection(): Promise<void>;
+  isTapToPaySupported(): Promise<{ supported: boolean, message?: string, localisedMessage?: string }>;
 
   addListener(
     eventName: TerminalEventsEnum.Loaded,
