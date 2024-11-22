@@ -151,6 +151,7 @@ export interface StripeTerminalPlugin {
   rebootReader(): Promise<void>;
   cancelReaderReconnection(): Promise<void>;
   isTapToPaySupported(): Promise<{ supported: boolean, message?: string, localisedMessage?: string }>;
+  setConfiguration(config: { isTest?: boolean }): Promise<void>;
 
   addListener(
     eventName: TerminalEventsEnum.Loaded,

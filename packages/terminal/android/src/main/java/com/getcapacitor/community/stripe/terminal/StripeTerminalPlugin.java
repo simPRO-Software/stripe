@@ -212,4 +212,9 @@ public class StripeTerminalPlugin extends Plugin {
             this.implementation.isTapToPaySupported(call);
         }
     }
+
+    @PluginMethod
+    public void setConfiguration(PluginCall call) {
+        this.implementation.setConfiguration(call);
+    }
 }

@@ -130,7 +130,7 @@ public class StripeTerminal: NSObject, DiscoveryDelegate, TerminalDelegate, Read
             call.reject("StripeTerminal is not initialized. Please initialize StripeTerminal first.")
             return
         }
-        
+
         let result = Terminal.shared.supportsReaders(of: .tapToPay, discoveryMethod: .tapToPay, simulated: self.isTest ?? true)
         switch result {
             case .success:
@@ -138,6 +138,11 @@ public class StripeTerminal: NSObject, DiscoveryDelegate, TerminalDelegate, Read
             case .failure(let error):
                 call.reject(error.localizedDescription)
         }
+    }
+
+    public func setConfiguration(_ call: CAPPluginCall) {
+        self.isTest = call.getBool("isTest", true)
+        call.resolve();
     }
 
     private func connectTapToPayReader(_ call: CAPPluginCall) {

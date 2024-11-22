@@ -680,6 +680,13 @@ public class StripeTerminal extends Executor {
         }
     }
 
+    public void setConfiguration(final PluginCall call) {
+        if (call.getBoolean("isTest") != null) {
+            this.isTest = call.getBoolean("isTest");
+        }
+        call.resolve();
+    }
+
     private final PaymentIntentCallback confirmPaymentMethodCallback = new PaymentIntentCallback() {
         @Override
         public void onSuccess(@NonNull PaymentIntent paymentIntent) {

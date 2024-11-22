@@ -246,6 +246,10 @@ export class StripeTerminalWeb
     };
   }
 
+  async setConfiguration(config: { isTest?: boolean }): Promise<void> {
+    this.isTest = config.isTest || false;
+  }
+
   collect = 'deprecated';
   cancelCollect = 'deprecated';
 }

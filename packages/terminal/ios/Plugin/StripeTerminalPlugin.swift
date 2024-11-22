@@ -88,5 +88,9 @@ public class StripeTerminalPlugin: CAPPlugin {
     @objc func isTapToPaySupported(_ call: CAPPluginCall) {
         self.implementation.isTapToPaySupported(call)
     }
+    
+    @objc func setConfiguration(_ call: CAPPluginCall) {
+        self.implementation.setConfiguration(call)
+    }
 
 }
