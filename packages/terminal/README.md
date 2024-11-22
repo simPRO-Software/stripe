@@ -222,7 +222,7 @@ await StripeTerminal.setSimulatorConfiguration({ update: SimulateReaderUpdate.Up
 * [`clearReaderDisplay()`](#clearreaderdisplay)
 * [`rebootReader()`](#rebootreader)
 * [`cancelReaderReconnection()`](#cancelreaderreconnection)
-* [`isTapToPaySupported()`](#istaptopaysupported)
+* [`isTapToPaySupported(...)`](#istaptopaysupported)
 * [`setConfiguration(...)`](#setconfiguration)
 * [`addListener(TerminalEventsEnum.Loaded, ...)`](#addlistenerterminaleventsenumloaded)
 * [`addListener(TerminalEventsEnum.RequestedConnectionToken, ...)`](#addlistenerterminaleventsenumrequestedconnectiontoken)
@@ -443,11 +443,15 @@ cancelReaderReconnection() => Promise<void>
 --------------------
 
 
-### isTapToPaySupported()
+### isTapToPaySupported(...)
 
 ```typescript
-isTapToPaySupported() => Promise<{ supported: boolean; message?: string; localisedMessage?: string; }>
+isTapToPaySupported(config: { isSimulated: boolean; }) => Promise<{ supported: boolean; message?: string; localisedMessage?: string; }>
 ```
+
+| Param        | Type                                   |
+| ------------ | -------------------------------------- |
+| **`config`** | <code>{ isSimulated: boolean; }</code> |
 
 **Returns:** <code>Promise&lt;{ supported: boolean; message?: string; localisedMessage?: string; }&gt;</code>
 
