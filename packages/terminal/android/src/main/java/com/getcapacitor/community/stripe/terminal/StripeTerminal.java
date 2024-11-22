@@ -668,7 +668,8 @@ public class StripeTerminal extends Executor {
             call.reject("StripeTerminal is not initialized. Please initialize StripeTerminal first.");
             return;
         }
-        ReaderSupportResult readerSupportResult = Terminal.getInstance().supportsReadersOfType(DeviceType.TAP_TO_PAY_DEVICE, new DiscoveryConfiguration.TapToPayDiscoveryConfiguration());
+        var isSimulated = call.getBoolean("isSimulated", false);
+        ReaderSupportResult readerSupportResult = Terminal.getInstance().supportsReadersOfType(DeviceType.TAP_TO_PAY_DEVICE, new DiscoveryConfiguration.TapToPayDiscoveryConfiguration(isSimulated));
 
         var returnObject = new JSObject();
         returnObject.put("supported", readerSupportResult.isSupported());

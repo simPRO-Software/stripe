@@ -150,7 +150,7 @@ export interface StripeTerminalPlugin {
   clearReaderDisplay(): Promise<void>;
   rebootReader(): Promise<void>;
   cancelReaderReconnection(): Promise<void>;
-  isTapToPaySupported(): Promise<{ supported: boolean, message?: string, localisedMessage?: string }>;
+  isTapToPaySupported(config: { isSimulated: boolean }): Promise<{ supported: boolean, message?: string, localisedMessage?: string }>;
   setConfiguration(config: { isTest?: boolean }): Promise<void>;
 
   addListener(

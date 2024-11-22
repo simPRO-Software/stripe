@@ -131,7 +131,8 @@ public class StripeTerminal: NSObject, DiscoveryDelegate, TerminalDelegate, Read
             return
         }
 
-        let result = Terminal.shared.supportsReaders(of: .tapToPay, discoveryMethod: .tapToPay, simulated: self.isTest ?? true)
+        let isSimulated = call.getBool("isSimulated", true)
+        let result = Terminal.shared.supportsReaders(of: .tapToPay, discoveryMethod: .tapToPay, simulated: isSimulated)
         switch result {
             case .success:
                 call.resolve(["supported": true])
