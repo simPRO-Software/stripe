@@ -250,6 +250,12 @@ export class StripeTerminalWeb
     this.isTest = config.isTest || false;
   }
 
+  async isNFCEnabled(): Promise<{ nfcStatus: 'Enabled' | 'Disabled' | 'NotSupported' }> {
+    return {
+      nfcStatus: 'NotSupported',
+    };
+  }
+
   collect = 'deprecated';
   cancelCollect = 'deprecated';
 }

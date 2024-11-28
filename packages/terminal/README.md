@@ -224,6 +224,7 @@ await StripeTerminal.setSimulatorConfiguration({ update: SimulateReaderUpdate.Up
 * [`cancelReaderReconnection()`](#cancelreaderreconnection)
 * [`isTapToPaySupported(...)`](#istaptopaysupported)
 * [`setConfiguration(...)`](#setconfiguration)
+* [`isNFCEnabled()`](#isnfcenabled)
 * [`addListener(TerminalEventsEnum.Loaded, ...)`](#addlistenerterminaleventsenumloaded)
 * [`addListener(TerminalEventsEnum.RequestedConnectionToken, ...)`](#addlistenerterminaleventsenumrequestedconnectiontoken)
 * [`addListener(TerminalEventsEnum.DiscoveredReaders, ...)`](#addlistenerterminaleventsenumdiscoveredreaders)
@@ -467,6 +468,17 @@ setConfiguration(config: { isTest?: boolean; }) => Promise<void>
 | Param        | Type                               |
 | ------------ | ---------------------------------- |
 | **`config`** | <code>{ isTest?: boolean; }</code> |
+
+--------------------
+
+
+### isNFCEnabled()
+
+```typescript
+isNFCEnabled() => Promise<{ nfcStatus: 'Enabled' | 'Disabled' | 'NotSupported'; }>
+```
+
+**Returns:** <code>Promise&lt;{ nfcStatus: 'Enabled' | 'Disabled' | 'NotSupported'; }&gt;</code>
 
 --------------------
 

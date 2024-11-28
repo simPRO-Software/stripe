@@ -217,4 +217,9 @@ public class StripeTerminalPlugin extends Plugin {
     public void setConfiguration(PluginCall call) {
         this.implementation.setConfiguration(call);
     }
+
+    @PluginMethod
+    public void isNFCEnabled(PluginCall call) {
+        this.implementation.isNFCEnabled(call);
+    }
 }

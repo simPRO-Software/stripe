@@ -63,6 +63,8 @@ import java.util.Objects;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
+import android.nfc.NfcAdapter;
+import android.nfc.NfcManager;
 
 public class StripeTerminal extends Executor {
 
@@ -690,6 +692,24 @@ public class StripeTerminal extends Executor {
             this.isTest = call.getBoolean("isTest");
         }
         call.resolve();
+    }
+
+    public void isNFCEnabled(final PluginCall call) {
+        Context context = this.contextSupplier.get();
+        NfcManager nfcManager = (NfcManager) context.getSystemService(Context.NFC_SERVICE);
+        NfcAdapter nfcAdapter = nfcManager.getDefaultAdapter();
+
+        JSObject result = new JSObject();
+
+        if (nfcAdapter == null) {
+            // Device doesn't support NFC
+            result.put("nfcStatus", "NotSupported");
+        } else {
+            // Check if NFC is enabled
+            result.put("nfcStatus", nfcAdapter.isEnabled() ? "Enabled" : "Disabled");
+        }
+
+        call.resolve(result);
     }
 
     private final PaymentIntentCallback confirmPaymentMethodCallback = new PaymentIntentCallback() {

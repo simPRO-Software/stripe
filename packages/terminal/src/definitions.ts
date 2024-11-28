@@ -152,6 +152,7 @@ export interface StripeTerminalPlugin {
   cancelReaderReconnection(): Promise<void>;
   isTapToPaySupported(config: { isSimulated: boolean }): Promise<{ supported: boolean, message?: string, localisedMessage?: string }>;
   setConfiguration(config: { isTest?: boolean }): Promise<void>;
+  isNFCEnabled(): Promise<{ nfcStatus: 'Enabled' | 'Disabled' | 'NotSupported' }>;
 
   addListener(
     eventName: TerminalEventsEnum.Loaded,
