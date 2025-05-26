@@ -15,7 +15,6 @@
     "dist/",
     "ios/Sources",
     "ios/Tests",
-    "Package.swift",
     "CapacitorCommunityStripeIdentity.podspec"
   ],
   "author": "Masahiko Sakakibara",
