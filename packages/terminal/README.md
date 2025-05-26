@@ -1,12 +1,12 @@
-# @capacitor-community/stripe-terminal
+# @simPRO-Software/stripe-terminal
 
 Stripe SDK bindings for Capacitor Applications. __This plugin is still in the RC (release candidate) phase.__
-We have confirmed that it works well in the demo project. Please refer to https://github.com/capacitor-community/stripe/tree/main/demo/angular for the implementation.
+We have confirmed that it works well in the demo project. Please refer to <https://github.com/simPRO-Software/stripe/tree/main/demo/angular> for the implementation.
 
 ## Install
 
 ```bash
-npm install @capacitor-community/stripe-terminal
+npm install @simPRO-Software/stripe-terminal
 npx cap sync
 ```
 
@@ -14,7 +14,7 @@ npx cap sync
 
 No additional steps are necessary.
 
-__Note: Stripe Web SDK is beta version. So this plugin's implement is experimental. Please refer to https://github.com/stripe/terminal-js for more information.__
+__Note: Stripe Web SDK is beta version. So this plugin's implement is experimental. Please refer to <https://github.com/stripe/terminal-js> for more information.__
 
 ### iOS
 
@@ -44,7 +44,7 @@ Add permissions to your `android/app/src/main/AndroidManifest.xml` file:
 + <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
 ```
 
-If used in conjunction with the `@capacitor-community/stripe` plugin, the following settings may be necessary
+If used in conjunction with the `@simPRO-Software/stripe` plugin, the following settings may be necessary
 
 Add packagingOptions to your `android/app/build.gradle` file:
 
@@ -66,8 +66,8 @@ And update minSdkVersion to 26 And compileSdkVersion to 34 in your `android/app/
 ```
 
 If you are developing apps for Stripe Android devices (e.g. Stripe Reader S700), follow the Stripe's documentation for the client-side setup.
-- [Stripe - Android configure your app](https://docs.stripe.com/terminal/features/apps-on-devices/build?terminal-sdk-platform=android&lang-android=java#setup-app)
 
+- [Stripe - Android configure your app](https://docs.stripe.com/terminal/features/apps-on-devices/build?terminal-sdk-platform=android&lang-android=java#setup-app)
 
 ## Usage
 
@@ -127,7 +127,7 @@ If you are developing apps for Stripe Android devices (e.g. Stripe Reader S700),
 
 ### Listen device update
 
-The device will **if necessary** automatically start updating itself. It is important to handle them as needed so as not to disrupt business operations.
+The device will __if necessary__ automatically start updating itself. It is important to handle them as needed so as not to disrupt business operations.
 
 ```ts
 (async ()=> {
@@ -235,29 +235,32 @@ await StripeTerminal.setSimulatorConfiguration({ update: SimulateReaderUpdate.Up
 * [`clearReaderDisplay()`](#clearreaderdisplay)
 * [`rebootReader()`](#rebootreader)
 * [`cancelReaderReconnection()`](#cancelreaderreconnection)
-* [`addListener(TerminalEventsEnum.Loaded, ...)`](#addlistenerterminaleventsenumloaded-)
-* [`addListener(TerminalEventsEnum.RequestedConnectionToken, ...)`](#addlistenerterminaleventsenumrequestedconnectiontoken-)
-* [`addListener(TerminalEventsEnum.DiscoveredReaders, ...)`](#addlistenerterminaleventsenumdiscoveredreaders-)
-* [`addListener(TerminalEventsEnum.ConnectedReader, ...)`](#addlistenerterminaleventsenumconnectedreader-)
-* [`addListener(TerminalEventsEnum.DisconnectedReader, ...)`](#addlistenerterminaleventsenumdisconnectedreader-)
-* [`addListener(TerminalEventsEnum.ConnectionStatusChange, ...)`](#addlistenerterminaleventsenumconnectionstatuschange-)
-* [`addListener(TerminalEventsEnum.UnexpectedReaderDisconnect, ...)`](#addlistenerterminaleventsenumunexpectedreaderdisconnect-)
-* [`addListener(TerminalEventsEnum.ConfirmedPaymentIntent, ...)`](#addlistenerterminaleventsenumconfirmedpaymentintent-)
-* [`addListener(TerminalEventsEnum.CollectedPaymentIntent, ...)`](#addlistenerterminaleventsenumcollectedpaymentintent-)
-* [`addListener(TerminalEventsEnum.Canceled, ...)`](#addlistenerterminaleventsenumcanceled-)
-* [`addListener(TerminalEventsEnum.Failed, ...)`](#addlistenerterminaleventsenumfailed-)
-* [`addListener(TerminalEventsEnum.ReportAvailableUpdate, ...)`](#addlistenerterminaleventsenumreportavailableupdate-)
-* [`addListener(TerminalEventsEnum.StartInstallingUpdate, ...)`](#addlistenerterminaleventsenumstartinstallingupdate-)
-* [`addListener(TerminalEventsEnum.ReaderSoftwareUpdateProgress, ...)`](#addlistenerterminaleventsenumreadersoftwareupdateprogress-)
-* [`addListener(TerminalEventsEnum.FinishInstallingUpdate, ...)`](#addlistenerterminaleventsenumfinishinstallingupdate-)
-* [`addListener(TerminalEventsEnum.BatteryLevel, ...)`](#addlistenerterminaleventsenumbatterylevel-)
-* [`addListener(TerminalEventsEnum.ReaderEvent, ...)`](#addlistenerterminaleventsenumreaderevent-)
-* [`addListener(TerminalEventsEnum.RequestDisplayMessage, ...)`](#addlistenerterminaleventsenumrequestdisplaymessage-)
-* [`addListener(TerminalEventsEnum.RequestReaderInput, ...)`](#addlistenerterminaleventsenumrequestreaderinput-)
-* [`addListener(TerminalEventsEnum.PaymentStatusChange, ...)`](#addlistenerterminaleventsenumpaymentstatuschange-)
-* [`addListener(TerminalEventsEnum.ReaderReconnectStarted, ...)`](#addlistenerterminaleventsenumreaderreconnectstarted-)
-* [`addListener(TerminalEventsEnum.ReaderReconnectSucceeded, ...)`](#addlistenerterminaleventsenumreaderreconnectsucceeded-)
-* [`addListener(TerminalEventsEnum.ReaderReconnectFailed, ...)`](#addlistenerterminaleventsenumreaderreconnectfailed-)
+* [`isTapToPaySupported(...)`](#istaptopaysupported)
+* [`setConfiguration(...)`](#setconfiguration)
+* [`isNFCEnabled()`](#isnfcenabled)
+* [`addListener(TerminalEventsEnum.Loaded, ...)`](#addlistenerterminaleventsenumloaded)
+* [`addListener(TerminalEventsEnum.RequestedConnectionToken, ...)`](#addlistenerterminaleventsenumrequestedconnectiontoken)
+* [`addListener(TerminalEventsEnum.DiscoveredReaders, ...)`](#addlistenerterminaleventsenumdiscoveredreaders)
+* [`addListener(TerminalEventsEnum.ConnectedReader, ...)`](#addlistenerterminaleventsenumconnectedreader)
+* [`addListener(TerminalEventsEnum.DisconnectedReader, ...)`](#addlistenerterminaleventsenumdisconnectedreader)
+* [`addListener(TerminalEventsEnum.ConnectionStatusChange, ...)`](#addlistenerterminaleventsenumconnectionstatuschange)
+* [`addListener(TerminalEventsEnum.UnexpectedReaderDisconnect, ...)`](#addlistenerterminaleventsenumunexpectedreaderdisconnect)
+* [`addListener(TerminalEventsEnum.ConfirmedPaymentIntent, ...)`](#addlistenerterminaleventsenumconfirmedpaymentintent)
+* [`addListener(TerminalEventsEnum.CollectedPaymentIntent, ...)`](#addlistenerterminaleventsenumcollectedpaymentintent)
+* [`addListener(TerminalEventsEnum.Canceled, ...)`](#addlistenerterminaleventsenumcanceled)
+* [`addListener(TerminalEventsEnum.Failed, ...)`](#addlistenerterminaleventsenumfailed)
+* [`addListener(TerminalEventsEnum.ReportAvailableUpdate, ...)`](#addlistenerterminaleventsenumreportavailableupdate)
+* [`addListener(TerminalEventsEnum.StartInstallingUpdate, ...)`](#addlistenerterminaleventsenumstartinstallingupdate)
+* [`addListener(TerminalEventsEnum.ReaderSoftwareUpdateProgress, ...)`](#addlistenerterminaleventsenumreadersoftwareupdateprogress)
+* [`addListener(TerminalEventsEnum.FinishInstallingUpdate, ...)`](#addlistenerterminaleventsenumfinishinstallingupdate)
+* [`addListener(TerminalEventsEnum.BatteryLevel, ...)`](#addlistenerterminaleventsenumbatterylevel)
+* [`addListener(TerminalEventsEnum.ReaderEvent, ...)`](#addlistenerterminaleventsenumreaderevent)
+* [`addListener(TerminalEventsEnum.RequestDisplayMessage, ...)`](#addlistenerterminaleventsenumrequestdisplaymessage)
+* [`addListener(TerminalEventsEnum.RequestReaderInput, ...)`](#addlistenerterminaleventsenumrequestreaderinput)
+* [`addListener(TerminalEventsEnum.PaymentStatusChange, ...)`](#addlistenerterminaleventsenumpaymentstatuschange)
+* [`addListener(TerminalEventsEnum.ReaderReconnectStarted, ...)`](#addlistenerterminaleventsenumreaderreconnectstarted)
+* [`addListener(TerminalEventsEnum.ReaderReconnectSucceeded, ...)`](#addlistenerterminaleventsenumreaderreconnectsucceeded)
+* [`addListener(TerminalEventsEnum.ReaderReconnectFailed, ...)`](#addlistenerterminaleventsenumreaderreconnectfailed)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 * [Enums](#enums)
@@ -326,12 +329,12 @@ setSimulatorConfiguration(options: { update?: SimulateReaderUpdate; simulatedCar
 ### connectReader(...)
 
 ```typescript
-connectReader(options: { reader: ReaderInterface; autoReconnectOnUnexpectedDisconnect?: boolean; merchantDisplayName?: string; onBehalfOf?: string; }) => Promise<void>
+connectReader(options: { reader: ReaderInterface; autoReconnectOnUnexpectedDisconnect?: boolean; merchantDisplayName?: string; onBehalfOf?: string; locationId?: string; }) => Promise<void>
 ```
 
-| Param         | Type                                                                                                                                                                       |
-| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`options`** | <code>{ reader: <a href="#readerinterface">ReaderInterface</a>; autoReconnectOnUnexpectedDisconnect?: boolean; merchantDisplayName?: string; onBehalfOf?: string; }</code> |
+| Param         | Type                                                                                                                                                                                            |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`options`** | <code>{ reader: <a href="#readerinterface">ReaderInterface</a>; autoReconnectOnUnexpectedDisconnect?: boolean; merchantDisplayName?: string; onBehalfOf?: string; locationId?: string; }</code> |
 
 --------------------
 
@@ -450,6 +453,45 @@ rebootReader() => Promise<void>
 ```typescript
 cancelReaderReconnection() => Promise<void>
 ```
+
+--------------------
+
+
+### isTapToPaySupported(...)
+
+```typescript
+isTapToPaySupported(config: { isSimulated: boolean; }) => Promise<{ supported: boolean; message?: string; localisedMessage?: string; }>
+```
+
+| Param        | Type                                   |
+| ------------ | -------------------------------------- |
+| **`config`** | <code>{ isSimulated: boolean; }</code> |
+
+**Returns:** <code>Promise&lt;{ supported: boolean; message?: string; localisedMessage?: string; }&gt;</code>
+
+--------------------
+
+
+### setConfiguration(...)
+
+```typescript
+setConfiguration(config: { isTest?: boolean; }) => Promise<void>
+```
+
+| Param        | Type                               |
+| ------------ | ---------------------------------- |
+| **`config`** | <code>{ isTest?: boolean; }</code> |
+
+--------------------
+
+
+### isNFCEnabled()
+
+```typescript
+isNFCEnabled() => Promise<{ nfcStatus: 'Enabled' | 'Disabled' | 'NotSupported'; }>
+```
+
+**Returns:** <code>Promise&lt;{ nfcStatus: 'Enabled' | 'Disabled' | 'NotSupported'; }&gt;</code>
 
 --------------------
 

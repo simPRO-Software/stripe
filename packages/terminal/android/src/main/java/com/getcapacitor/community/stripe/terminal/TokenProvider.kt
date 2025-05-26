@@ -17,9 +17,9 @@ import org.json.JSONObject
 import java.util.Objects
 
 class TokenProvider(
-    protected var contextSupplier: Supplier<Context>,
-    protected val tokenProviderEndpoint: String,
-    protected var notifyListenersFunction: BiConsumer<String, JSObject>
+    private var contextSupplier: Supplier<Context>,
+    private val tokenProviderEndpoint: String,
+    private var notifyListenersFunction: BiConsumer<String, JSObject>
 ) : ConnectionTokenProvider {
     private var pendingCallback: ArrayList<ConnectionTokenCallback> = ArrayList()
 
@@ -79,7 +79,7 @@ class TokenProvider(
         }
     }
 
-    protected fun notifyListeners(eventName: String?, data: JSObject?) {
+    private fun notifyListeners(eventName: String?, data: JSObject?) {
         notifyListenersFunction.accept(eventName!!, data!!)
     }
 }

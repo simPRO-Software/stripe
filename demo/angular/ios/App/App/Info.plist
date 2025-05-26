@@ -56,6 +56,6 @@
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>Bluetooth access is required to connect to supported card readers.</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>このアプリは、Bluetooth を使用してサポート対象のカードリーダーに接続します。</string>
+	<string>This app uses Bluetooth to connect to supported card readers.</string>
 </dict>
 </plist>

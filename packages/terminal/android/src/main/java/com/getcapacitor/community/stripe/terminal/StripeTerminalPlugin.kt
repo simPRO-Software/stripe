@@ -26,6 +26,9 @@ import com.stripe.stripeterminal.external.models.TerminalException
     ), Permission(
         alias = "bluetooth",
         strings = [Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_ADVERTISE]
+    ), Permission(
+        alias = "nfc",
+        strings = [Manifest.permission.NFC]
     )]
 )
 class StripeTerminalPlugin : Plugin() {
@@ -201,5 +204,33 @@ class StripeTerminalPlugin : Plugin() {
     @PluginMethod
     fun cancelReaderReconnection(call: PluginCall) {
         implementation.cancelReaderReconnection(call)
+    }
+
+    @PermissionCallback
+    fun nfcPermsCallback(call: PluginCall) {
+        if (getPermissionState("nfc") == PermissionState.GRANTED) {
+            isTapToPaySupported(call)
+        } else {
+            requestPermissionForAlias("nfc", call, "nfcPermsCallback")
+        }
+    }
+
+    @PluginMethod
+    fun isTapToPaySupported(call: PluginCall) {
+        if (getPermissionState("nfc") != PermissionState.GRANTED) {
+            requestPermissionForAlias("nfc", call, "nfcPermsCallback")
+        } else {
+            implementation.isTapToPaySupported(call)
+        }
+    }
+
+    @PluginMethod
+    fun setConfiguration(call: PluginCall) {
+        implementation.setConfiguration(call)
+    }
+
+    @PluginMethod
+    fun isNFCEnabled(call: PluginCall) {
+        implementation.isNFCEnabled(call)
     }
 }

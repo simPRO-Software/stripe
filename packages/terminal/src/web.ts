@@ -213,6 +213,20 @@ export class StripeTerminalWeb extends WebPlugin implements StripeTerminalPlugin
   async cancelReaderReconnection(): Promise<void> {
     console.log('cancelReaderReconnection');
   }
+  async isTapToPaySupported(): Promise<{ supported: boolean; message?: string; localisedMessage?: string; }> {
+    return {
+      supported: false,
+      message: 'isTapToPaySupported is not supported in web platform.',
+    };
+  }
+  async setConfiguration(config: { isTest?: boolean }): Promise<void> {
+    this.isTest = config.isTest || false;
+  }
+  async isNFCEnabled(): Promise<{ nfcStatus: 'Enabled' | 'Disabled' | 'NotSupported' }> {
+    return {
+      nfcStatus: 'NotSupported',
+    };
+  }
 
   collect = 'deprecated';
   cancelCollect = 'deprecated';

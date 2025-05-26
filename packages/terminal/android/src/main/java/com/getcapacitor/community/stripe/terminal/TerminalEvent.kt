@@ -1,4 +1,4 @@
-package com.getcapacitor.community.stripe.terminal;
+package com.getcapacitor.community.stripe.terminal
 
 enum class TerminalEnumEvent(val webEventName: String) {
     Loaded("terminalLoaded"),

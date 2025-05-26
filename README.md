@@ -16,8 +16,7 @@
 |--------------------------------------|-------------|--------------------------------------------------------------------------------------------------------|
 | @capacitor-community/stripe          | Support for non-personal payments using Stripe | [/packages/payment](https://github.com/capacitor-community/stripe/tree/main/packages/payment#readme)   |
 | @capacitor-community/stripe-identity | Supports identity verification using Stripe | [/packages/identity](https://github.com/capacitor-community/stripe/tree/main/packages/identity#readme) |
-| @capacitor-community/stripe-terminal | Support for in-person payments using Stripe  | [/packages/terminal](https://github.com/capacitor-community/stripe/tree/main/packages/terminal#readme) |
-
+| @simPRO-Software/stripe-terminal | Support for in-person payments using Stripe  | [/packages/terminal](https://github.com/capacitor-community/stripe/tree/main/packages/terminal#readme) |
 
 ## Hint
 
@@ -46,7 +45,7 @@ Users of Capacitor v6 should use version v6 of the Plugin.
 ```bash
 % npm install @capacitor-community/stripe@6
 % npm install @capacitor-community/stripe-identity@6
-% npm install @capacitor-community/stripe-terminal@6
+% npm install @simPRO-Software/stripe-terminal@6
 ```
 
 ### How to use Stripe Android currently package
@@ -54,7 +53,7 @@ Users of Capacitor v6 should use version v6 of the Plugin.
 Capacitor Android 7's default settings is here:
 
 ```
-minSdkVersion = 22
+minSdkVersion = 24
 compileSdkVersion = 35
 targetSdkVersion = 35
 ```
@@ -62,9 +61,10 @@ targetSdkVersion = 35
 To use the latest Stripe Android, you need to version these up. To use the latest features, follow these steps.
 
 1. Open `android/variables.gradle` and change sdkVersion version, if need.
-2. Add `stripeAndroidVersion`, `identityVersion` or `stripeterminalCoreVersion` and set required version. Release information is here: 
-- https://github.com/stripe/stripe-android/releases
-- https://github.com/stripe/stripe-terminal-android/releases
+2. Add `stripeAndroidVersion`, `identityVersion` or `stripeterminalCoreVersion` and set required version. Release information is here:
+
+- <https://github.com/stripe/stripe-android/releases>
+- <https://github.com/stripe/stripe-terminal-android/releases>
 
 ```diff
   ext {
@@ -90,13 +90,13 @@ To use the latest Stripe Android, you need to version these up. To use the lates
     // If you use @capacitor-community/stripe-identity:
 +   identityVersion = '21.3.+'
 
-    // If you use @capacitor-community/stripe-terminal:
+    // If you use @simPRO-Software/stripe-terminal:
 +   stripeterminalCoreVersion = '4.1.0'
 +   stripeterminalTapToPayVersion = '4.1.0'
   }
 ```
 
-Note: `@capacitor-community/stripe-terminal` does not work with the default sdkVersion, so these updates are mandatory. See [/packages/terminal](https://github.com/capacitor-community/stripe/tree/main/packages/terminal#readme) for more information.
+Note: `@simPRO-Software/stripe-terminal` does not work with the default sdkVersion, so these updates are mandatory. See [/packages/terminal](https://github.com/capacitor-community/stripe/tree/main/packages/terminal#readme) for more information.
 
 ### Error when running `cap update ios`
 
@@ -116,7 +116,7 @@ You will see this error often when using Capacitor iOS. The solution is simple: 
 % cd ios/App && pod install --repo-update
 ```
 
-or 
+or
 
 ```bash
 % cd ios/App && pod update
@@ -130,6 +130,7 @@ or
 | Masahiko Sakakibara | [rdlabo](https://github.com/rdlabo) | [@rdlabo](https://twitter.com/rdlabo) |
 
 ## Contributors ✨
+
 <a href="https://github.com/capacitor-community/stripe/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=capacitor-community/stripe" />
 </a>
@@ -151,7 +152,6 @@ Made with [contributors-img](https://contrib.rocks).
 | PaymentFlow  | ![](demo/screenshots/payment-flow-android.png)  | ![](demo/screenshots/payment-flow-ios.png)  | ![](demo/screenshots/payment-sheet-web.png) |
 |   ApplePay   |                  Not supported                  |   ![](demo/screenshots/apple-pay-ios.png)   |                    beta.                    |
 |  GooglePay   |  ![](demo/screenshots/google-pay-android.png)   |                Not supported                |  ![](demo/screenshots/google-pay-web.png)   |
-
 
 #### @capacitor-community/stripe-identity
 

@@ -6,7 +6,8 @@ export const usePaymentSheet = () => {
         if (process.env.REACT_APP_API_URL) {
             return process.env.REACT_APP_API_URL
         }
-        return 'https://j3x0ln9gj7.execute-api.ap-northeast-1.amazonaws.com/dev/'
+        // return 'https://j3x0ln9gj7.execute-api.ap-northeast-1.amazonaws.com/dev/'
+        return 'https://localdev.shiv19.com/'
     },[])
     const createPaymentIntent = useCallback(async (): Promise<{
         customer: string;

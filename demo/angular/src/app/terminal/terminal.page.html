@@ -15,6 +15,12 @@
       ><ion-label>Expect Happy Path - Tap To Pay</ion-label></ion-item
     >
     <ion-item
+      (click)="checkTapToPayDeviceSupport()"
+      button="true"
+      detail="true"
+      ><ion-label>Tap To Pay - Check device support</ion-label></ion-item
+    >
+    <ion-item
       (click)="create('happyPath', terminalConnectTypes.Internet)"
       button="true"
       detail="true"

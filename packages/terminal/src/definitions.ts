@@ -125,6 +125,7 @@ export interface StripeTerminalPlugin {
      * The Stripe account ID for which these funds are intended.
      */
     onBehalfOf?: string;
+    locationId?: string;
   }): Promise<void>;
   getConnectedReader(): Promise<{ reader: ReaderInterface | null }>;
   disconnectReader(): Promise<void>;
@@ -138,6 +139,9 @@ export interface StripeTerminalPlugin {
   clearReaderDisplay(): Promise<void>;
   rebootReader(): Promise<void>;
   cancelReaderReconnection(): Promise<void>;
+  isTapToPaySupported(config: { isSimulated: boolean }): Promise<{ supported: boolean, message?: string, localisedMessage?: string }>;
+  setConfiguration(config: { isTest?: boolean }): Promise<void>;
+  isNFCEnabled(): Promise<{ nfcStatus: 'Enabled' | 'Disabled' | 'NotSupported' }>;
 
   addListener(eventName: TerminalEventsEnum.Loaded, listenerFunc: () => void): Promise<PluginListenerHandle>;
 

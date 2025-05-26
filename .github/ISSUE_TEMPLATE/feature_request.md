@@ -29,4 +29,4 @@ Using Function:
 - [ ] Apple Pay
 - [ ] Google Pay
 - [ ] Identity (@capacitor-community/stripe-identity)
-- [ ] Terminal（@capacitor-community/stripe-terminal）
+- [ ] Terminal（@simPRO-Software/stripe-terminal）

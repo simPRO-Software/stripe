@@ -2,11 +2,11 @@
 import PackageDescription
 
 let package = Package(
-    name: "CapacitorCommunityStripeTerminal",
+    name: "SimPROSoftwareStripeTerminal",
     platforms: [.iOS(.v14)],
     products: [
         .library(
-            name: "CapacitorCommunityStripeTerminal",
+            name: "SimPROSoftwareStripeTerminal",
             targets: ["StripeTerminalPlugin"])
     ],
     dependencies: [
@@ -21,7 +21,8 @@ let package = Package(
                 .product(name: "Cordova", package: "capacitor-swift-pm"),
                 .product(name: "StripeTerminal", package: "stripe-terminal-ios")
             ],
-            path: "ios/Sources/StripeTerminalPlugin"),
+            path: "ios/Sources/StripeTerminalPlugin",
+            exclude: ["Info.plist", "StripeTerminalPlugin.h", "StripeTerminalPlugin.m"]),
         .testTarget(
             name: "StripeTerminalPluginTests",
             dependencies: ["StripeTerminalPlugin"],

@@ -35,11 +35,11 @@ Add any other context about the problem here.
 **Usage Product**
 If you adopt this plugin, please let us know which product you are using.
 
-Product Name: 
+Product Name:
 Product URL :
 Using Function:
 - [ ] Payment Sheet / Payment Flow
 - [ ] Apple Pay
 - [ ] Google Pay
 - [ ] Identity (@capacitor-community/stripe-identity)
-- [ ] Terminal（@capacitor-community/stripe-terminal）
+- [ ] Terminal（@simPRO-Software/stripe-terminal）

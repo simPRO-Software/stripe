@@ -24,7 +24,7 @@ import {
   StripeTerminal,
   TerminalConnectTypes,
   TerminalEventsEnum,
-} from '@capacitor-community/stripe-terminal';
+} from '@simPRO-Software/stripe-terminal';
 import { environment } from '../../environments/environment';
 import { firstValueFrom } from 'rxjs';
 import { ITestItems } from '../shared/interfaces';
@@ -228,7 +228,8 @@ export class TerminalPage {
       type: readerType,
       locationId: [TerminalConnectTypes.Usb].includes(readerType)
         ? 'tml_Ff37mAmk1XdBYT'
-        : 'tml_FOUOdQVIxvVdvN',
+        // : 'tml_FOUOdQVIxvVdvN',
+        : 'tml_FzOLdgFjxlDQbh',
     }).catch((e) => {
       this.helper.updateItem(this.eventItems, 'discoverReaders', false);
       throw e;
@@ -545,6 +546,14 @@ export class TerminalPage {
         }
       },
     );
+  }
+
+  checkTapToPayDeviceSupport() {
+    StripeTerminal.isTapToPaySupported().then((result) => {
+      console.log('isAvailable', result);
+    }).catch((e) => {
+      console.error(e);
+    });
   }
 
   private alertFilterReaders(

@@ -6,7 +6,6 @@ import android.app.Application
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.pm.PackageManager
-import android.os.Build
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.util.Supplier
@@ -37,6 +36,7 @@ import com.stripe.stripeterminal.external.models.CartLineItem
 import com.stripe.stripeterminal.external.models.CollectConfiguration
 import com.stripe.stripeterminal.external.models.ConnectionConfiguration
 import com.stripe.stripeterminal.external.models.ConnectionStatus
+import com.stripe.stripeterminal.external.models.DeviceType
 import com.stripe.stripeterminal.external.models.DisconnectReason
 import com.stripe.stripeterminal.external.models.DiscoveryConfiguration
 import com.stripe.stripeterminal.external.models.PaymentIntent
@@ -54,6 +54,7 @@ import com.stripe.stripeterminal.log.LogLevel
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.Objects
+import android.nfc.NfcManager
 
 //import com.stripe.stripeterminal.external.callable.ReaderReconnectionListener;
 class StripeTerminal(
@@ -174,7 +175,7 @@ class StripeTerminal(
             return
         }
 
-        this.locationId = call.getString("locationId")
+        this.locationId = call.getString("locationId", this.locationId)
         val config: DiscoveryConfiguration
         if (call.getString("type") == TerminalConnectTypes.TapToPay.webEventName) {
             config = DiscoveryConfiguration.TapToPayDiscoveryConfiguration(this.isTest!!)
@@ -229,25 +230,37 @@ class StripeTerminal(
                     }
 
                     override fun onFailure(e: TerminalException) {
-                        Log.d(logTag, e.localizedMessage)
+                        Log.d(logTag, e.localizedMessage ?: "Unknown error")
+                        val returnObject = JSObject()
+                        returnObject.put("message", e.localizedMessage)
+                        returnObject.put("code", e.errorCode.name)
+                        call.reject(e.localizedMessage, e.errorCode.name, returnObject)
                     }
                 }
             )
     }
 
     fun connectReader(call: PluginCall) {
-        if (this.terminalConnectType == TerminalConnectTypes.TapToPay) {
-            this.connectTapToPayReader(call)
-        } else if (this.terminalConnectType == TerminalConnectTypes.Internet) {
-            this.connectInternetReader(call)
-        } else if (this.terminalConnectType == TerminalConnectTypes.Usb) {
-            this.connectUsbReader(call)
-        } else if (this.terminalConnectType == TerminalConnectTypes.Bluetooth) {
-            this.connectBluetoothReader(call)
-        } else if (this.terminalConnectType == TerminalConnectTypes.HandOff) {
-            this.connectHandOffReader(call)
-        } else {
-            call.reject("type is not defined.")
+        this.locationId = call.getString("locationId", this.locationId)
+        when (this.terminalConnectType) {
+            TerminalConnectTypes.TapToPay -> {
+                this.connectTapToPayReader(call)
+            }
+            TerminalConnectTypes.Internet -> {
+                this.connectInternetReader(call)
+            }
+            TerminalConnectTypes.Usb -> {
+                this.connectUsbReader(call)
+            }
+            TerminalConnectTypes.Bluetooth -> {
+                this.connectBluetoothReader(call)
+            }
+            TerminalConnectTypes.HandOff -> {
+                this.connectHandOffReader(call)
+            }
+            else -> {
+                call.reject("type is not defined.")
+            }
         }
     }
 
@@ -287,7 +300,6 @@ class StripeTerminal(
     private fun connectTapToPayReader(call: PluginCall) {
         val reader = call.getObject("reader")
         val serialNumber = reader.getString("serialNumber")
-        this.locationId = call.getString("locationId", this.locationId)
 
         val foundReader = this.findReader(this.discoveredReadersList, serialNumber)
 
@@ -309,7 +321,7 @@ class StripeTerminal(
         Terminal.getInstance().connectReader(foundReader, config, this.readerCallback(call))
     }
 
-    var tapToPayReaderListener: TapToPayReaderListener = object : TapToPayReaderListener {
+    private var tapToPayReaderListener: TapToPayReaderListener = object : TapToPayReaderListener {
         override fun onReaderReconnectFailed(reader: Reader) {
             notifyListeners(
                 TerminalEnumEvent.ReaderReconnectFailed.webEventName,
@@ -345,7 +357,7 @@ class StripeTerminal(
         }
     }
 
-    var internetReaderListener: InternetReaderListener = object : InternetReaderListener {
+    private var internetReaderListener: InternetReaderListener = object : InternetReaderListener {
         override fun onDisconnect(reason: DisconnectReason) {
             notifyListeners(
                 TerminalEnumEvent.DisconnectedReader.webEventName,
@@ -383,7 +395,6 @@ class StripeTerminal(
     private fun connectInternetReader(call: PluginCall) {
         val reader = call.getObject("reader")
         val serialNumber = reader.getString("serialNumber")
-        this.locationId = call.getString("locationId", this.locationId)
 
         val foundReader = this.findReader(this.discoveredReadersList, serialNumber)
 
@@ -400,10 +411,27 @@ class StripeTerminal(
         Terminal.getInstance().connectReader(foundReader, config, this.readerCallback(call))
     }
 
+    fun isTapToPaySupported(call: PluginCall) {
+        if (!isInitialized()) {
+            call.reject("StripeTerminal is not initialized. Please initialize StripeTerminal first.")
+            return
+        }
+        val isSimulated = call.getBoolean("isSimulated") ?: false
+        val readerSupportResult = Terminal.getInstance().supportsReadersOfType(DeviceType.TAP_TO_PAY_DEVICE, DiscoveryConfiguration.TapToPayDiscoveryConfiguration(isSimulated))
+
+        val returnObject = JSObject()
+        returnObject.put("supported", readerSupportResult.isSupported)
+        if (readerSupportResult.error != null) {
+            returnObject.put("localisedMessage", readerSupportResult.error!!.localizedMessage)
+            call.reject("Unsupported", returnObject)
+        } else {
+            call.resolve(returnObject)
+        }
+    }
+
     private fun connectUsbReader(call: PluginCall) {
         val reader = call.getObject("reader")
         val serialNumber = reader.getString("serialNumber")
-        this.locationId = call.getString("locationId", this.locationId)
 
         val foundReader = this.findReader(this.discoveredReadersList, serialNumber)
 
@@ -424,7 +452,6 @@ class StripeTerminal(
     private fun connectBluetoothReader(call: PluginCall) {
         val reader = call.getObject("reader")
         val serialNumber = reader.getString("serialNumber")
-        this.locationId = call.getString("locationId", this.locationId)
 
         val foundReader = this.findReader(this.discoveredReadersList, serialNumber)
 
@@ -463,7 +490,7 @@ class StripeTerminal(
         Terminal.getInstance().connectReader(foundReader, config, this.readerCallback(call))
     }
 
-    var handoffReaderListener: HandoffReaderListener = object : HandoffReaderListener {
+    private var handoffReaderListener: HandoffReaderListener = object : HandoffReaderListener {
         override fun onDisconnect(reason: DisconnectReason) {
             notifyListeners(
                 TerminalEnumEvent.DisconnectedReader.webEventName,
@@ -543,15 +570,15 @@ class StripeTerminal(
                 )
             }
 
-            override fun onFailure(exception: TerminalException) {
-                notifyListeners(TerminalEnumEvent.Failed.webEventName, emptyObject)
+            override fun onFailure(e: TerminalException) {
                 val returnObject = JSObject()
-                returnObject.put("message", exception.localizedMessage)
-                if (exception.apiError != null) {
-                    returnObject.put("code", exception.apiError!!.code)
-                    returnObject.put("declineCode", exception.apiError!!.declineCode)
+                returnObject.put("message", e.localizedMessage)
+                if (e.apiError != null) {
+                    returnObject.put("code", e.apiError!!.code)
+                    returnObject.put("declineCode", e.apiError!!.declineCode)
                 }
-                collectCall!!.reject(exception.localizedMessage, null as String?, returnObject)
+                notifyListeners(TerminalEnumEvent.Failed.webEventName, returnObject)
+                collectCall!!.reject(e.localizedMessage, null as String?, returnObject)
             }
         }
 
@@ -594,17 +621,19 @@ class StripeTerminal(
             }
 
             override fun onFailure(e: TerminalException) {
-                notifyListeners(TerminalEnumEvent.Failed.webEventName, emptyObject)
-                var errorCode: String? = "generic_error"
-                if (e.apiError != null && e.apiError!!.code != null) {
-                    errorCode = e.apiError!!.code
+                val errorCode = if (e.apiError != null && e.apiError!!.code != null) {
+                    e.apiError!!.code
+                } else {
+                    e.errorCode.name
                 }
                 val returnObject = JSObject()
                 returnObject.put("message", e.localizedMessage)
+                returnObject.put("code", errorCode)
                 if (e.apiError != null) {
                     returnObject.put("code", e.apiError!!.code)
                     returnObject.put("declineCode", e.apiError!!.declineCode)
                 }
+                notifyListeners(TerminalEnumEvent.Failed.webEventName, returnObject)
                 collectCall!!.reject(e.localizedMessage, errorCode, returnObject)
             }
         }
@@ -750,6 +779,31 @@ class StripeTerminal(
         )
     }
 
+    fun setConfiguration(call: PluginCall) {
+        if (call.getBoolean("isTest") != null) {
+            this.isTest = call.getBoolean("isTest")
+        }
+        call.resolve()
+    }
+
+    fun isNFCEnabled(call: PluginCall) {
+        val context = this.contextSupplier.get()
+        val nfcManager = context.getSystemService(Context.NFC_SERVICE) as NfcManager
+        val nfcAdapter = nfcManager.defaultAdapter
+
+        val result = JSObject()
+
+        if (nfcAdapter == null) {
+            // Device doesn't support NFC
+            result.put("nfcStatus", "NotSupported")
+        } else {
+            // Check if NFC is enabled
+            result.put("nfcStatus", if (nfcAdapter.isEnabled) "Enabled" else "Disabled")
+        }
+
+        call.resolve(result)
+    }
+
     private val confirmPaymentMethodCallback: PaymentIntentCallback =
         object : PaymentIntentCallback {
             override fun onSuccess(paymentIntent: PaymentIntent) {
@@ -759,13 +813,13 @@ class StripeTerminal(
             }
 
             override fun onFailure(e: TerminalException) {
-                notifyListeners(TerminalEnumEvent.Failed.webEventName, emptyObject)
                 val returnObject = JSObject()
                 returnObject.put("message", e.localizedMessage)
                 if (e.apiError != null) {
                     returnObject.put("code", e.apiError!!.code)
                     returnObject.put("declineCode", e.apiError!!.declineCode)
                 }
+                notifyListeners(TerminalEnumEvent.Failed.webEventName, returnObject)
                 confirmPaymentIntentCall!!.reject(
                     e.localizedMessage,
                     null as String?,
@@ -788,7 +842,10 @@ class StripeTerminal(
 
             override fun onFailure(e: TerminalException) {
                 e.printStackTrace()
-                call.reject(e.localizedMessage, e)
+                val returnObject = JSObject()
+                returnObject.put("message", e.localizedMessage)
+                returnObject.put("code", e.errorCode.name)
+                call.reject(e.localizedMessage, e.errorCode.name, returnObject)
             }
         }
     }
@@ -932,13 +989,12 @@ class StripeTerminal(
             .put("location", terminalMappers.mapFromLocation(reader.location))
     }
 
-    private fun convertReaderSoftwareUpdate(update: ReaderSoftwareUpdate): JSObject? {
+    private fun convertReaderSoftwareUpdate(update: ReaderSoftwareUpdate): JSObject {
         return terminalMappers.mapFromReaderSoftwareUpdate(update)
     }
 
     private fun findReader(discoveredReadersList: List<Reader?>, serialNumber: String?): Reader? {
-        var foundReader: Reader? = null
-        foundReader = discoveredReadersList
+        val foundReader = discoveredReadersList
             .stream()
             .filter { device: Reader? -> serialNumber != null && serialNumber == device!!.serialNumber }
             .findFirst()
