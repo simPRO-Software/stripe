@@ -144,6 +144,7 @@ public class StripeTerminal: NSObject, DiscoveryDelegate, TerminalDelegate, Read
 
     private func connectTapToPayReader(_ call: CAPPluginCall) {
         let autoReconnectOnUnexpectedDisconnect = call.getBool("autoReconnectOnUnexpectedDisconnect", false)
+        let tosAcceptancePermitted = call.getBool("tosAcceptancePermitted", false)
         let merchantDisplayName: String? = call.getString("merchantDisplayName")
         let onBehalfOf: String? = call.getString("onBehalfOf")
         let reader: JSObject = call.getObject("reader")!
@@ -153,6 +154,7 @@ public class StripeTerminal: NSObject, DiscoveryDelegate, TerminalDelegate, Read
             .setMerchantDisplayName(merchantDisplayName ?? nil)
             .setOnBehalfOf(onBehalfOf ?? nil)
             .setAutoReconnectOnUnexpectedDisconnect(autoReconnectOnUnexpectedDisconnect)
+            .setTosAcceptancePermitted(tosAcceptancePermitted)
             .build()
 
         guard let foundReader = self.discoveredReadersList?.first(where: { $0.serialNumber == serialNumber }) else {

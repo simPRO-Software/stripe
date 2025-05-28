@@ -116,12 +116,17 @@ export interface StripeTerminalPlugin {
     autoReconnectOnUnexpectedDisconnect?: boolean;
 
     /**
-     * iOS and LocalMobileReader only. Android needs to be set to PaymentIntent only.
+     * iOS and TapToPayReader only. Android needs to be set to PaymentIntent only.
      */
     merchantDisplayName?: string;
 
     /**
-     * iOS and LocalMobileReader only. Android needs to be set to PaymentIntent only.
+     * iOS and TapToPayReader only, controls whether or not tos Acceptance is permitted. Default: false
+     */
+    tosAcceptancePermitted?: boolean;
+
+    /**
+     * iOS and TapToPayReader only. Android needs to be set to PaymentIntent only.
      * The Stripe account ID for which these funds are intended.
      */
     onBehalfOf?: string;
