@@ -2,7 +2,7 @@
   "name": "@simPRO-Software/stripe-terminal",
   "version": "6.4.0",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=18.0.0"
   },
   "description": "Stripe SDK bindings for Capacitor Applications",
   "main": "dist/plugin.cjs.js",
@@ -13,8 +13,7 @@
     "android/src/main/",
     "android/build.gradle",
     "dist/",
-    "ios/Sources",
-    "ios/Tests",
+    "ios/Plugin/",
     "SimPROSoftwareStripeTerminal.podspec"
   ],
   "author": "Masahiko Sakakibara",
@@ -33,16 +32,16 @@
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
-    "verify:ios": "cd ios && xcodebuild -workspace Plugin.xcworkspace -scheme Plugin -destination generic/platform=iOS",
+    "verify:ios": "cd ios && pod install && xcodebuild -workspace Plugin.xcworkspace -scheme Plugin -destination generic/platform=iOS && cd ..",
     "verify:android": "cd android && ./gradlew clean build test && cd ..",
     "verify:web": "npm run build",
     "lint": "npm run eslint && npm run prettier -- --check && npm run swiftlint -- lint",
     "fmt": "npm run eslint -- --fix && npm run prettier -- --write && npm run swiftlint -- --fix --format",
     "eslint": "eslint . --ext ts",
-    "prettier": "prettier \"**/*.{css,html,ts,js,java}\" --plugin=prettier-plugin-java",
+    "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
     "swiftlint": "node-swiftlint",
     "docgen": "docgen --api StripeTerminalPlugin --output-readme README.md --output-json dist/docs.json",
-    "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.mjs",
+    "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build"
