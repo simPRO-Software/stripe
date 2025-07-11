@@ -48,6 +48,7 @@ import com.stripe.stripeterminal.external.models.ReaderInputOptions
 import com.stripe.stripeterminal.external.models.ReaderSoftwareUpdate
 import com.stripe.stripeterminal.external.models.SimulateReaderUpdate
 import com.stripe.stripeterminal.external.models.SimulatedCard
+import com.stripe.stripeterminal.external.models.SimulatedCardType
 import com.stripe.stripeterminal.external.models.SimulatorConfiguration
 import com.stripe.stripeterminal.external.models.TerminalException
 import com.stripe.stripeterminal.log.LogLevel
@@ -147,16 +148,18 @@ class StripeTerminal(
         try {
             val updateString = call.getString("update", "UPDATE_AVAILABLE")
             val simulateReaderUpdate = SimulateReaderUpdate.entries.find { it.name == updateString }
+            val cardType = call.getString("simulatedCard", "VISA")!!
+            val tipAmount = call.getLong("simulatedTipAmount", null)
 
-            Terminal.getInstance()
-                .simulatorConfiguration = SimulatorConfiguration(
+            // Map the string name to the SDK's SimulatedCardType enum
+            val simCardType = SimulatedCardType.valueOf(cardType)
+            val cardSim = SimulatedCard(simCardType)
+            Terminal.getInstance().simulatorConfiguration = SimulatorConfiguration(
                 simulateReaderUpdate!!,
-                SimulatedCard(call.getString("simulatedCard", "VISA")!!),
-                call.getLong("simulatedTipAmount", null),
+                cardSim,
+                tipAmount,
                 false
             )
-
-
             call.resolve()
         } catch (ex: Exception) {
             call.reject(ex.message)
