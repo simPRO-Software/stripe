@@ -6,9 +6,11 @@ import androidx.core.util.Supplier
 import com.getcapacitor.Bridge
 import com.getcapacitor.JSObject
 import com.getcapacitor.PluginCall
+import com.getcapacitor.community.stripe.helper.PaymentSheetHelper
 import com.getcapacitor.community.stripe.models.Executor
 import com.google.android.gms.common.util.BiConsumer
 import com.stripe.android.paymentsheet.PaymentSheet
+import com.stripe.android.paymentsheet.PaymentSheet.PaymentMethodLayout
 import com.stripe.android.paymentsheet.PaymentSheetResult
 import com.stripe.android.paymentsheet.model.PaymentOption
 
@@ -25,8 +27,8 @@ class PaymentFlowExecutor(
     "PaymentFlowExecutor"
 ) {
     var flowController: PaymentSheet.FlowController? = null
+    private var configurationBuilder: PaymentSheet.Configuration.Builder? = null
     private val emptyObject = JSObject()
-    private var paymentConfiguration: PaymentSheet.Configuration? = null
 
     init {
         this.contextSupplier = contextSupplier
@@ -37,6 +39,13 @@ class PaymentFlowExecutor(
         val setupIntentClientSecret = call.getString("setupIntentClientSecret", null)
         val customerEphemeralKeySecret = call.getString("customerEphemeralKeySecret", null)
         val customerId = call.getString("customerId", null)
+
+        val paymentMethodLayout: PaymentMethodLayout = when (call.getString("paymentMethodLayout", "automatic")) {
+            "horizontal" -> PaymentMethodLayout.Horizontal
+            "vertical"   -> PaymentMethodLayout.Vertical
+            "automatic"  -> PaymentMethodLayout.Automatic
+            else         -> PaymentMethodLayout.Automatic
+        }
 
         if (paymentIntentClientSecret == null && setupIntentClientSecret == null) {
             val errorText =
@@ -72,32 +81,40 @@ class PaymentFlowExecutor(
         ) PaymentSheet.CustomerConfiguration(customerId, customerEphemeralKeySecret!!)
         else null
 
-        if (!enableGooglePay!!) {
-            paymentConfiguration = PaymentSheet.Configuration(merchantDisplayName, customer)
-        } else {
-            val GooglePayEnvironment = call.getBoolean("GooglePayIsTesting", false)
+        val defaultBillingDetailsConfiguration = PaymentSheetHelper().fromJSObjectToBillingDetails(call.getObject("defaultBillingDetails", null))
+        val shippingDetailsConfiguration = PaymentSheetHelper().fromJSObjectToShippingDetails(call.getObject("shippingDetails", null));
+        val billingDetailsCollectionConfiguration = PaymentSheetHelper().fromJSObjectToBillingCollectionConfig(
+            call.getObject("billingDetailsCollectionConfiguration", null)
+        )
+
+        configurationBuilder = PaymentSheet.Configuration.Builder(merchantDisplayName)
+            .customer(customer)
+            .defaultBillingDetails(defaultBillingDetailsConfiguration)
+            .shippingDetails(shippingDetailsConfiguration)
+            .billingDetailsCollectionConfiguration(billingDetailsCollectionConfiguration)
+            .paymentMethodLayout(paymentMethodLayout)
+
+        if (enableGooglePay!!) {
+            val googlePayEnvironment = call.getBoolean("GooglePayIsTesting", false)!!
 
             var environment: PaymentSheet.GooglePayConfiguration.Environment =
                 PaymentSheet.GooglePayConfiguration.Environment.Production
 
-            if (GooglePayEnvironment!!) {
+            if (googlePayEnvironment) {
                 environment = PaymentSheet.GooglePayConfiguration.Environment.Test
             }
 
-            paymentConfiguration = PaymentSheet.Configuration(
-                merchantDisplayName,
-                customer,
-                PaymentSheet.GooglePayConfiguration(
-                    environment,
-                    call.getString("countryCode", "US")!!
-                )
-            )
+            configurationBuilder!!.googlePay(PaymentSheet.GooglePayConfiguration(
+                environment,
+                call.getString("countryCode", "US")!!,
+                call.getString("currencyCode", null)
+            ))
         }
 
         if (setupIntentClientSecret != null) {
             flowController!!.configureWithSetupIntent(
                 setupIntentClientSecret,
-                paymentConfiguration
+                configurationBuilder!!.build()
             ) { success: Boolean, error: Throwable? ->
                 if (success) {
                     notifyListenersFunction.accept(
@@ -116,7 +133,7 @@ class PaymentFlowExecutor(
         } else if (paymentIntentClientSecret != null) {
             flowController!!.configureWithPaymentIntent(
                 paymentIntentClientSecret,
-                paymentConfiguration
+                configurationBuilder!!.build()
             ) { success: Boolean, error: Throwable? ->
                 if (success) {
                     notifyListenersFunction.accept(

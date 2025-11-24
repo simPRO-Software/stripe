@@ -30,6 +30,15 @@ class PaymentSheetExecutor: NSObject {
         // MARK: Create a PaymentSheet instance
         var configuration = PaymentSheet.Configuration()
 
+        let paymentMethodLayout = call.getString("paymentMethodLayout") ?? "automatic"
+        if paymentMethodLayout == "horizontal" {
+            configuration.paymentMethodLayout = .horizontal
+        } else if paymentMethodLayout == "vertical" {
+            configuration.paymentMethodLayout = .vertical
+        } else {
+            configuration.paymentMethodLayout = .automatic
+        }
+
         let merchantDisplayName = call.getString("merchantDisplayName") ?? ""
         if merchantDisplayName != "" {
             configuration.merchantDisplayName = merchantDisplayName
@@ -40,13 +49,11 @@ class PaymentSheetExecutor: NSObject {
             configuration.returnURL = returnURL
         }
 
-        if #available(iOS 13.0, *) {
-            let style = call.getString("style") ?? ""
-            if style == "alwaysLight" {
-                configuration.style = .alwaysLight
-            } else if style == "alwaysDark" {
-                configuration.style = .alwaysDark
-            }
+        let style = call.getString("style") ?? ""
+        if style == "alwaysLight" {
+            configuration.style = .alwaysLight
+        } else if style == "alwaysDark" {
+            configuration.style = .alwaysDark
         }
 
         let applePayMerchantId = call.getString("applePayMerchantId") ?? ""
@@ -68,13 +75,47 @@ class PaymentSheetExecutor: NSObject {
                 let val: String = value as? String ?? "automatic"
                 switch key {
                 case "email":
-                    configuration.billingDetailsCollectionConfiguration.email = getCollectionModeValue(mode: val)
+                    configuration.billingDetailsCollectionConfiguration.email = PaymentSheetHelper().getCollectionModeValue(mode: val)
                 case "name":
-                    configuration.billingDetailsCollectionConfiguration.name = getCollectionModeValue(mode: val)
+                    configuration.billingDetailsCollectionConfiguration.name = PaymentSheetHelper().getCollectionModeValue(mode: val)
                 case "phone":
-                    configuration.billingDetailsCollectionConfiguration.phone = getCollectionModeValue(mode: val)
+                    configuration.billingDetailsCollectionConfiguration.phone = PaymentSheetHelper().getCollectionModeValue(mode: val)
                 case "address":
-                    configuration.billingDetailsCollectionConfiguration.address = getAddressCollectionModeValue(mode: val)
+                    configuration.billingDetailsCollectionConfiguration.address = PaymentSheetHelper().getAddressCollectionModeValue(mode: val)
+                default:
+                    return
+                }
+            })
+        }
+
+        let defaultBillingDetails = call.getObject("defaultBillingDetails") ?? nil
+        if defaultBillingDetails != nil {
+            defaultBillingDetails?.forEach({ (key: String, value: JSValue) in
+                switch key {
+                case "email":
+                    if let val = value as? String {
+                        configuration.defaultBillingDetails.email = val
+                    }
+                case "name":
+                    if let val = value as? String {
+                        configuration.defaultBillingDetails.name = val
+                    }
+                case "phone":
+                    if let val = value as? String {
+                        configuration.defaultBillingDetails.phone = val
+                    }
+                case "address":
+                    if let val = value as? JSObject {
+                        let address = PaymentSheet.Address(
+                            city: val["city"] as? String,
+                            country: val["country"] as? String,
+                            line1: val["line1"] as? String,
+                            line2: val["line2"] as? String,
+                            postalCode: val["postalCode"] as? String,
+                            state: val["state"] as? String
+                        )
+                        configuration.defaultBillingDetails.address = address
+                    }
                 default:
                     return
                 }
@@ -112,25 +153,4 @@ class PaymentSheetExecutor: NSObject {
         }
     }
 
-    func getCollectionModeValue(mode: String) -> PaymentSheet.BillingDetailsCollectionConfiguration.CollectionMode {
-        switch mode {
-        case "always":
-            return .always
-        case "never":
-            return .never
-        default:
-            return .automatic
-        }
-    }
-
-    func getAddressCollectionModeValue(mode: String) -> PaymentSheet.BillingDetailsCollectionConfiguration.AddressCollectionMode {
-        switch mode {
-        case "full":
-            return .full
-        case "never":
-            return .never
-        default:
-            return .automatic
-        }
-    }
 }
