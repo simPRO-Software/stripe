@@ -60,6 +60,9 @@ import { updateDeviceUpdateItems } from './updateDeviceUpdateItems';
   ],
 })
 export class TerminalPage {
+  private http = inject(HttpClient);
+  private helper = inject(HelperService);
+
   public eventItems: ITestItems[] = [];
   public terminalConnectTypes = TerminalConnectTypes;
   public simulateReaderUpdate = SimulateReaderUpdate;
@@ -68,10 +71,10 @@ export class TerminalPage {
   public readonly platform = inject(Platform);
   private readonly alertCtrl = inject(AlertController);
 
-  constructor(
-    private http: HttpClient,
-    private helper: HelperService,
-  ) {
+  /** Inserted by Angular inject() migration for backwards compatibility */
+  constructor();
+
+  constructor() {
     addIcons({ playOutline, notificationsCircleOutline, checkmarkCircle });
   }
 
@@ -226,7 +229,7 @@ export class TerminalPage {
 
     await StripeTerminal.discoverReaders({
       type: readerType,
-      locationId: [TerminalConnectTypes.Usb].includes(readerType)
+      locationId: [TerminalConnectTypes.Usb, TerminalConnectTypes.Bluetooth].includes(readerType)
         ? 'tml_Ff37mAmk1XdBYT'
         // : 'tml_FOUOdQVIxvVdvN',
         : 'tml_FzOLdgFjxlDQbh',
@@ -252,9 +255,10 @@ export class TerminalPage {
 
     await StripeTerminal.discoverReaders({
       type: readerType,
-      locationId: [TerminalConnectTypes.Usb].includes(readerType)
+      locationId: [TerminalConnectTypes.Usb, TerminalConnectTypes.Bluetooth].includes(readerType)
         ? 'tml_Ff37mAmk1XdBYT' // Auckland, New Zealand
         : 'tml_FOUOdQVIxvVdvN', // San Francisco, CA 94110
+      bluetoothScanWaitTime: 2000,
     }).catch((e) => {
       this.helper.updateItem(this.eventItems, 'discoverReaders', false);
       throw e;
@@ -381,7 +385,7 @@ export class TerminalPage {
 
     await StripeTerminal.discoverReaders({
       type: readerType,
-      locationId: [TerminalConnectTypes.Usb].includes(readerType)
+      locationId: [TerminalConnectTypes.Usb, TerminalConnectTypes.Bluetooth].includes(readerType)
         ? 'tml_Ff37mAmk1XdBYT' // Auckland, New Zealand
         : 'tml_FOUOdQVIxvVdvN', // San Francisco, CA 94110
     }).catch((e) => {

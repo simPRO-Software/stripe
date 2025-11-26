@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ITestItems } from '../shared/interfaces';
 import {
   IdentityVerificationSheetEventsEnum,
@@ -47,6 +47,11 @@ const happyPathItems: ITestItems[] = [
   },
   {
     type: 'event',
+    name: IdentityVerificationSheetEventsEnum.VerificationResult,
+    expect: IdentityVerificationSheetEventsEnum.Completed,
+  },
+  {
+    type: 'event',
     name: IdentityVerificationSheetEventsEnum.Completed,
   },
 ];
@@ -71,6 +76,11 @@ const cancelPathItems: ITestItems[] = [
   },
   {
     type: 'event',
+    name: IdentityVerificationSheetEventsEnum.VerificationResult,
+    expect: IdentityVerificationSheetEventsEnum.Canceled,
+  },
+  {
+    type: 'event',
     name: IdentityVerificationSheetEventsEnum.Canceled,
   },
 ];
@@ -92,13 +102,16 @@ const cancelPathItems: ITestItems[] = [
   ],
 })
 export class IdentityPage {
+  private http = inject(HttpClient);
+  private helper = inject(HelperService);
+
   public eventItems: ITestItems[] = [];
   private readonly listenerHandlers: PluginListenerHandle[] = [];
 
-  constructor(
-    private http: HttpClient,
-    private helper: HelperService,
-  ) {
+  /** Inserted by Angular inject() migration for backwards compatibility */
+  constructor(...args: unknown[]);
+
+  constructor() {
     addIcons({ playOutline, notificationsCircleOutline, checkmarkCircle });
   }
 

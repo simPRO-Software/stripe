@@ -22,7 +22,7 @@ jobs:
       uses: actions/cache@v4
       with:
         path: node_modules
-        key: ${{ runner.os }}-node-${{ steps.setup_node.outputs.node-version }}-npm-${{ hashFiles('**/package-lock.json') }}-v1
+        key: ${{ runner.os }}-node-${{ steps.setup_node.outputs.node-version }}-npm-${{ hashFiles('**/package-lock.json') }}-v2
 
     - name: Build Payment package
       run: npm install && npm run build
@@ -57,7 +57,7 @@ jobs:
 
     - name: Build Android Debug APK
       working-directory: ./demo/angular/android
-      run: ./gradlew assembleDebug
+      run: ./gradlew assembleDebug --stacktrace
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v4
@@ -138,7 +138,7 @@ jobs:
         working-directory: ./packages/terminal
 
   verify-payment-ios:
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -157,7 +157,7 @@ jobs:
         working-directory: ./packages/payment
 
   verify-identity-ios:
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -176,7 +176,7 @@ jobs:
         working-directory: ./packages/identity
 
   verify-terminal-ios:
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3

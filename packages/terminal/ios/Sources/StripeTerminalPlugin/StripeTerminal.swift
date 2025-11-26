@@ -58,7 +58,27 @@ public class StripeTerminal: NSObject, DiscoveryDelegate, TerminalDelegate, Read
             return
         }
 
-        self.discoverCall = call
+        self.plugin?.notifyListeners(TerminalEvents.DiscoveringReaders.rawValue, data: [:])
+        
+        
+        let bluetoothScanWaitTime = call.getDouble("bluetoothScanWaitTime") ?? 0
+        if (self.type == .bluetoothScan && bluetoothScanWaitTime != 0) {
+            // When bluetoothScanWaitTime is non-zero, we defer the resolution of the call
+            // using a timer. In this case, discoverCall is not assigned because the resolution
+            // logic is handled asynchronously after the wait time.
+            DispatchQueue.main.asyncAfter(deadline: .now()  + bluetoothScanWaitTime / 1000.0) {
+                var readersJSObject: JSArray = []
+                for reader in self.discoveredReadersList ?? [] {
+                    readersJSObject.append(self.convertReaderInterface(reader: reader))
+                }
+                call.resolve([
+                    "readers": readersJSObject
+                ])
+            }
+        } else {
+            self.discoverCall = call
+        }
+        
         self.discoverCancelable = Terminal.shared.discoverReaders(config, delegate: self) { error in
             if let error = error {
                 print("discoverReaders failed: \(error)")
@@ -78,6 +98,8 @@ public class StripeTerminal: NSObject, DiscoveryDelegate, TerminalDelegate, Read
         self.discoveredReadersList = readers
 
         self.plugin?.notifyListeners(TerminalEvents.DiscoveredReaders.rawValue, data: ["readers": readersJSObject])
+        
+        // If self.type == .bluetoothScan, discoverCall is nil
         self.discoverCall?.resolve([
             "readers": readersJSObject
         ])
@@ -401,6 +423,7 @@ public class StripeTerminal: NSObject, DiscoveryDelegate, TerminalDelegate, Read
                     let errorDetails: [String: Any] = ["message": error.localizedDescription, "code": String((error as NSError).code)]
                     call.reject(error.localizedDescription, nil, nil, errorDetails)
                 } else {
+                    self.plugin?.notifyListeners(TerminalEvents.CancelDiscoveredReaders.rawValue, data: [:])
                     call.resolve()
                 }
             }

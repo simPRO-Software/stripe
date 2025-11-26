@@ -1,6 +1,6 @@
 {
   "name": "@capacitor-community/stripe",
-  "version": "7.1.2",
+  "version": "7.2.2",
   "engines": {
     "node": ">=20.0.0"
   },
@@ -15,7 +15,7 @@
     "url": "git+https://github.com/simPRO-Software/stripe.git"
   },
   "devDependencies": {
-    "np": "^7.7.0",
+    "np": "^10.2.0",
     "write-pkg": "^6.0.0"
   }
 }
